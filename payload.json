@@ -1,0 +1,1791 @@
+{
+    "testimg1": {
+        "Name": "11.0.1.37:9988/goharbor/testimg1",
+        "Digest": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+                "Size": 1234567,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+                "Size": 7654321,
+                "Annotations": null
+            }
+        ]
+    },
+    "testimg2": {
+        "Name": "11.0.1.37:9988/goharbor/testimg2",
+        "Digest": "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+                "Size": 7654321,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+                "Size": 9876543,
+                "Annotations": null
+            }
+        ]
+    },
+    "testimg3": {
+        "Name": "11.0.1.37:9988/goharbor/testimg3",
+        "Digest": "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+                "Size": 1234567,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+                "Size": 9876543,
+                "Annotations": null
+            }
+        ]
+    },
+    "clip": {
+        "Name": "11.0.1.37:9988/goharbor/clip",
+        "Digest": "sha256:b799aee84305f436c263d1a30dff6bc54209303862bfee07cb676bd4bb6c5296",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:8b91b88d557765cd8c6802668755a3f6dc4337b6ce15a17e4857139e5fc964f3",
+            "sha256:824416e234237961c9c5d4f41dfe5b295a3c35a671ee52889bfb08d8e257ec4c",
+            "sha256:8d53da26040835f622504d7762fad14d226ac414efeb5363f5febebc89ff224d",
+            "sha256:84c8c79126f669beec1dcf6f34cd88094471745570c19c29b465dfa7db1fdabd",
+            "sha256:2e1c130fa3ec1777a82123374b4c500623959f903c1dd731ee4a83e1f1b38ff2",
+            "sha256:aba684b5f2aa5b72f602d3848bd644d8e34b5b47bdd58e384df2da553289adb9",
+            "sha256:82885ac8e793cf00eff2c2afecdcfd75c0a9fdbe3856b1428514dbc39bc2c179",
+            "sha256:f39410f75632ab2f7aa9d25e23ae3495909193456186f0cfa0c532666c64c87b",
+            "sha256:552c14e88a3cbbad7f40955f37d8f5bab713ec9dfdb05e38c9d02115303bf94b",
+            "sha256:be5251e744fca65852ad0fbd0e5ffdd99c699857440122cc990e6502147205ba",
+            "sha256:470e5336c51d8b973869118ec7fcc3b0c68a43f272489932f9d8704651d29f04"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8b91b88d557765cd8c6802668755a3f6dc4337b6ce15a17e4857139e5fc964f3",
+                "Size": 27138450,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:824416e234237961c9c5d4f41dfe5b295a3c35a671ee52889bfb08d8e257ec4c",
+                "Size": 2781342,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8d53da26040835f622504d7762fad14d226ac414efeb5363f5febebc89ff224d",
+                "Size": 11042101,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:84c8c79126f669beec1dcf6f34cd88094471745570c19c29b465dfa7db1fdabd",
+                "Size": 243,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2e1c130fa3ec1777a82123374b4c500623959f903c1dd731ee4a83e1f1b38ff2",
+                "Size": 3136007,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aba684b5f2aa5b72f602d3848bd644d8e34b5b47bdd58e384df2da553289adb9",
+                "Size": 93,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:82885ac8e793cf00eff2c2afecdcfd75c0a9fdbe3856b1428514dbc39bc2c179",
+                "Size": 31871217,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f39410f75632ab2f7aa9d25e23ae3495909193456186f0cfa0c532666c64c87b",
+                "Size": 2374584089,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:552c14e88a3cbbad7f40955f37d8f5bab713ec9dfdb05e38c9d02115303bf94b",
+                "Size": 113,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:be5251e744fca65852ad0fbd0e5ffdd99c699857440122cc990e6502147205ba",
+                "Size": 4301911,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:470e5336c51d8b973869118ec7fcc3b0c68a43f272489932f9d8704651d29f04",
+                "Size": 3402467,
+                "Annotations": null
+            }
+        ]
+    },
+    "lora-gpu": {
+        "Name": "11.0.1.37:9988/goharbor/lora-gpu",
+        "Digest": "sha256:f1372622f8625bb5312fbbabed940ed26648a9b1cd9dc651d004b4f6aeefaee3",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:96d54c3075c9eeaed5561fd620828fd6bb5d80ecae7cb25f9ba5f7d88ea6e15c",
+            "sha256:76bc5b9004dd4160a0e5c4cf63e6ddfd9eac2b7e621fd93e502ca536828befab",
+            "sha256:745be48143aba1c7b5b787b0e6f8b3b7e6792e1c6b2ae3db726d4723120ae2ed",
+            "sha256:16050a505b65189e09b818454b163ec3f6893b03e6ba6511139322dd36056ebb",
+            "sha256:bff100167f2fd3b09ca4eec60dd396d92275f210fbfa859186415a43fede94cb",
+            "sha256:8877f90ff01de754a5cd4f0452fc662d671487ca7542280fb1b2062e76e2cc2b",
+            "sha256:bea2bcb6a7eaf5e669054323e96b4224d26711b4f99655914e1112abfe377469",
+            "sha256:336ac5c791a8e53b147e385aa78d825ce33e36c471caa6445d3ef29e4f3c02e2",
+            "sha256:2e95e22d10e48647299cf8b70a8223e58a6a9e2460a523c829525a8afdd81c83",
+            "sha256:f47c670b281b1cbd2b1be29c55ed2028cc8ff53c08082c3b2a05fd868781e7da",
+            "sha256:257fafda91603a936d628192d3858a2f161d82af31c60fa10783dccce5071ed0",
+            "sha256:d09f0bd0a35b72d5bde76c3182dbbfee5825caeb6af8911a83a1dd9f3234a16a",
+            "sha256:b85fd5d78c1a028d8cdfeab0df11af114475c7675e7f8aee36c6b60157f7b392",
+            "sha256:aafbf1180c444d7012f6bea9954b16a968cade9368c39646452948f6aadb8212",
+            "sha256:4af8ce793b2c3be78810c637e5e5a7126d04dfe6ea4b3ae6941bcaed11b9a8de",
+            "sha256:923871d654ef7313b1c6a7962cf468a0d19d247c10692fe5620761d23b4cfa66",
+            "sha256:21909d8cb0eb0bdea2752a0641c827d748a324193eeebf4a38eba7658fc852f3",
+            "sha256:d211fee14d9a600e856166fe1cbd2c3d3618a62cf98a02cd8bfd1b0f55aa0e26",
+            "sha256:642945121114a75de7e9a06d8a9773c6e765cf314f80f3d358ac9716fe3a1631",
+            "sha256:f50bd9f36f65342c44e374756d344c8a3e53457b5666a121e903507d36caa766",
+            "sha256:454e9522fcabc62eedc0c35f64886d1777b0ba524c792dfefbf720f3e8a53255",
+            "sha256:ad5daf6edf2ca775c4fcccb40d5bd6518841570440ac55d79e7e9ac43a45bc96"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:96d54c3075c9eeaed5561fd620828fd6bb5d80ecae7cb25f9ba5f7d88ea6e15c",
+                "Size": 27505999,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:76bc5b9004dd4160a0e5c4cf63e6ddfd9eac2b7e621fd93e502ca536828befab",
+                "Size": 7943248,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:745be48143aba1c7b5b787b0e6f8b3b7e6792e1c6b2ae3db726d4723120ae2ed",
+                "Size": 10790005,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:16050a505b65189e09b818454b163ec3f6893b03e6ba6511139322dd36056ebb",
+                "Size": 184,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bff100167f2fd3b09ca4eec60dd396d92275f210fbfa859186415a43fede94cb",
+                "Size": 6885,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8877f90ff01de754a5cd4f0452fc662d671487ca7542280fb1b2062e76e2cc2b",
+                "Size": 1511306597,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bea2bcb6a7eaf5e669054323e96b4224d26711b4f99655914e1112abfe377469",
+                "Size": 61250,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:336ac5c791a8e53b147e385aa78d825ce33e36c471caa6445d3ef29e4f3c02e2",
+                "Size": 1682,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2e95e22d10e48647299cf8b70a8223e58a6a9e2460a523c829525a8afdd81c83",
+                "Size": 1520,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f47c670b281b1cbd2b1be29c55ed2028cc8ff53c08082c3b2a05fd868781e7da",
+                "Size": 1595513282,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:257fafda91603a936d628192d3858a2f161d82af31c60fa10783dccce5071ed0",
+                "Size": 84087,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d09f0bd0a35b72d5bde76c3182dbbfee5825caeb6af8911a83a1dd9f3234a16a",
+                "Size": 1568326429,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:b85fd5d78c1a028d8cdfeab0df11af114475c7675e7f8aee36c6b60157f7b392",
+                "Size": 50868651,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aafbf1180c444d7012f6bea9954b16a968cade9368c39646452948f6aadb8212",
+                "Size": 507057602,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4af8ce793b2c3be78810c637e5e5a7126d04dfe6ea4b3ae6941bcaed11b9a8de",
+                "Size": 2070714599,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:923871d654ef7313b1c6a7962cf468a0d19d247c10692fe5620761d23b4cfa66",
+                "Size": 99,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:21909d8cb0eb0bdea2752a0641c827d748a324193eeebf4a38eba7658fc852f3",
+                "Size": 2684,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d211fee14d9a600e856166fe1cbd2c3d3618a62cf98a02cd8bfd1b0f55aa0e26",
+                "Size": 688,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:642945121114a75de7e9a06d8a9773c6e765cf314f80f3d358ac9716fe3a1631",
+                "Size": 6927,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f50bd9f36f65342c44e374756d344c8a3e53457b5666a121e903507d36caa766",
+                "Size": 22433,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:454e9522fcabc62eedc0c35f64886d1777b0ba524c792dfefbf720f3e8a53255",
+                "Size": 18137016,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ad5daf6edf2ca775c4fcccb40d5bd6518841570440ac55d79e7e9ac43a45bc96",
+                "Size": 6825718,
+                "Annotations": null
+            }
+        ]
+    },
+    "lora-cpu": {
+        "Name": "11.0.1.37:9988/goharbor/lora-cpu",
+        "Digest": "sha256:018b1a792fe7c4d8b125360a4ae7e48fa7f4c967ae543abfb36a536012b866c3",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:7c457f213c7634afb95a0fb2410a74b7b5bc0ba527033362c240c7a11bef4331",
+            "sha256:663fc1066832fa0007f19368cfdb78f483bfc76a3adbe2a7e1324001d11f747d",
+            "sha256:9eb41ba51f03eff2f90bbfa43071311c2090d145b7b893cc7ef05b62ae9c7834",
+            "sha256:5813c171c59145a271177c4f78c14f8afd27abee805dda38a5c30ebd1e1d1926",
+            "sha256:e055d74b3042a5b162184b0107599d60fbf74ad1ea63812dd0c9c4137df41396",
+            "sha256:f131def98dc5e1a29c40200aae9fb59223f4c6f2935d5cfb35cefe5881302ef9",
+            "sha256:1ae72f73e64bf525a2b007cf1c069d6a0460f621db8c49e5042f9d14763729f8",
+            "sha256:9d824e62c9673583e8d3d73a6cea8beb4b595ecd05928346a7cf5b68a1ec08a5",
+            "sha256:e626f20cb2b9d67a6ac25b3262236bbad348d6b75f544d8dcc46bc7721e843e8",
+            "sha256:4f74ad30d161d9cc354d185f75874fbc2f5d97591fe4bbd58906675ad6cecd01",
+            "sha256:d2e1d298bc7e2eb25cb341e92954cdb643c2a943f0d22b7485d335855775fead"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7c457f213c7634afb95a0fb2410a74b7b5bc0ba527033362c240c7a11bef4331",
+                "Size": 25691281,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:663fc1066832fa0007f19368cfdb78f483bfc76a3adbe2a7e1324001d11f747d",
+                "Size": 169378980,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9eb41ba51f03eff2f90bbfa43071311c2090d145b7b893cc7ef05b62ae9c7834",
+                "Size": 205942920,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5813c171c59145a271177c4f78c14f8afd27abee805dda38a5c30ebd1e1d1926",
+                "Size": 2070663821,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e055d74b3042a5b162184b0107599d60fbf74ad1ea63812dd0c9c4137df41396",
+                "Size": 99,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f131def98dc5e1a29c40200aae9fb59223f4c6f2935d5cfb35cefe5881302ef9",
+                "Size": 2682,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:1ae72f73e64bf525a2b007cf1c069d6a0460f621db8c49e5042f9d14763729f8",
+                "Size": 688,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9d824e62c9673583e8d3d73a6cea8beb4b595ecd05928346a7cf5b68a1ec08a5",
+                "Size": 6927,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e626f20cb2b9d67a6ac25b3262236bbad348d6b75f544d8dcc46bc7721e843e8",
+                "Size": 22111,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f74ad30d161d9cc354d185f75874fbc2f5d97591fe4bbd58906675ad6cecd01",
+                "Size": 18137019,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d2e1d298bc7e2eb25cb341e92954cdb643c2a943f0d22b7485d335855775fead",
+                "Size": 6982132,
+                "Annotations": null
+            }
+        ]
+    },
+    "sam2": {
+        "Name": "11.0.1.37:9988/goharbor/sam2",
+        "Digest": "sha256:2a50263a01e16bb7263d1dc0c3cf043e4d82cca4e20e96ef20f09636c5b91920",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:2ec76a50fe7c8d5db9ec25590b9217e14e3920513c6e7b5be55db72a16b55f7c",
+            "sha256:7e61b0f758fc9403904ce4d142bac68d88d6f3721bcec8056a24ccae47c75edb",
+            "sha256:e65ed687208ba4c9878e8960d746a03f154aa9b4f37ac05153364445d539162f",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:56aefa055df8838775b05f7d751e79d23c05019d3cba76b5e8eafde9d6e5c215",
+            "sha256:bef07fc17066d3fa5fdfd730981fd934abfe78c7909eabb1659e119e60476edc",
+            "sha256:151cfe8a1582a36452de625f7edc525f03b9129a01e96b89e3a963b635c68e0e",
+            "sha256:737fc88bd2a9dab6c716bb40caa2559a2668d04fb53cb90350312d5ae205c90e",
+            "sha256:4ade9ef0151c61232e4f5d08220467719c72125cedce4135022fd7a0fa4aed3e",
+            "sha256:bbb7b37b233652c6d24f2b2408709b704edba9cf1f9ac0503f33de50bb8d972a",
+            "sha256:3016e5d53982d816d7389fdb3c208979383f31ffbd5e7f558400252e9dd6a2f1",
+            "sha256:d84dd4e66cc7401c0fcecbc6bc46314073ed0d745b67cb55eb526c8a4c9d47f5",
+            "sha256:8e5a734b8ec6563dad97d6447391f50d8f37382e18f6d679883c95536d6764d9",
+            "sha256:3cbd5f38b1b01b4ad8f65c175ed615bb1b66e8bffccc9081190810c2c0c6f1cc",
+            "sha256:a889e3e7e6c1ff602f7e72aaaf4edcbaa8c160dbd3e882631a25c300102f0f86"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2ec76a50fe7c8d5db9ec25590b9217e14e3920513c6e7b5be55db72a16b55f7c",
+                "Size": 30439283,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7e61b0f758fc9403904ce4d142bac68d88d6f3721bcec8056a24ccae47c75edb",
+                "Size": 7210688,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e65ed687208ba4c9878e8960d746a03f154aa9b4f37ac05153364445d539162f",
+                "Size": 3686275866,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:56aefa055df8838775b05f7d751e79d23c05019d3cba76b5e8eafde9d6e5c215",
+                "Size": 99,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bef07fc17066d3fa5fdfd730981fd934abfe78c7909eabb1659e119e60476edc",
+                "Size": 302697,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:151cfe8a1582a36452de625f7edc525f03b9129a01e96b89e3a963b635c68e0e",
+                "Size": 287958321,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:737fc88bd2a9dab6c716bb40caa2559a2668d04fb53cb90350312d5ae205c90e",
+                "Size": 111,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4ade9ef0151c61232e4f5d08220467719c72125cedce4135022fd7a0fa4aed3e",
+                "Size": 55541367,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bbb7b37b233652c6d24f2b2408709b704edba9cf1f9ac0503f33de50bb8d972a",
+                "Size": 3280194171,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3016e5d53982d816d7389fdb3c208979383f31ffbd5e7f558400252e9dd6a2f1",
+                "Size": 171,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d84dd4e66cc7401c0fcecbc6bc46314073ed0d745b67cb55eb526c8a4c9d47f5",
+                "Size": 144816472,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8e5a734b8ec6563dad97d6447391f50d8f37382e18f6d679883c95536d6764d9",
+                "Size": 171192226,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3cbd5f38b1b01b4ad8f65c175ed615bb1b66e8bffccc9081190810c2c0c6f1cc",
+                "Size": 300352811,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:a889e3e7e6c1ff602f7e72aaaf4edcbaa8c160dbd3e882631a25c300102f0f86",
+                "Size": 833568681,
+                "Annotations": null
+            }
+        ]
+    },
+    "sb3-gpu": {
+        "Name": "11.0.1.37:9988/goharbor/sb3-gpu",
+        "Digest": "sha256:fad4f5d3737820049a8f01e1f46eabf09eb1e6517ad79fa5a0d1e6c32c405d66",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+            "sha256:976b13f9ef1ad110649609e8622e8b8010c011ee89afb03c87729873a5658b77",
+            "sha256:b63c65d3acaa1b7977b3a20e2479668e65e4fd16d6f119933b550619692b6924",
+            "sha256:4dda4739d0071d0fbd8b16db376052d74fe243b097f2ee2e8a709f80db9de63c",
+            "sha256:197843862cd5ca7e4c4ed2e392193bfc887c974c76ec8062a5aa817cb865fe49",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:5423b1ef163acc0e896428d8202b11838a3f6a807fadaa677fd38c8a994832f1",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:750c1f9f20a626edb973c89d023aa75078b2013d9b3da3435b2f900dca4e7da7",
+            "sha256:59b416cfac4330ba1ce4e755ac6d5468fbdab1f7229d9df545aeaf1d465aca16",
+            "sha256:603b7f7031bb7ccec1befed55cb4117e8ac503ca4f6f04eeb6cbe188a9d04caa",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:44743f4d3a6368d0eb1ef2f3232cd16c0aeff10097ec54255ddee64fc15cef01",
+            "sha256:d8aa3bf774d40499cdfb15d4f1b9ef059c8f4609c0e1d0fc14d6a5421fb6a38c",
+            "sha256:082903342505da399ae7d3cc13b229c695b8a56df27ddad7858f047867814724",
+            "sha256:bf51ff0f7c6a3788ddc84b3a4e229f936bd331e069f62449e7e776998d716fc8",
+            "sha256:ab6208c6e7040ed3d9ed2b55cb33467d8d657c288a9ddbd60dfdf482db5a971f",
+            "sha256:ff3340446ff0de093e1d76b794f2a02d6d4384e3d918eca72ca26f671f4c7146",
+            "sha256:511310c94df5413c7e3d133cfb9e7506a30d57884000d5a700eec25429b5a254",
+            "sha256:e71e55e8d959e1f2859e0c0839488cfe431b4aa486eea32ee1bcd2362220cbcb",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:e334f5c078fe7acd56e1d4bed5e176386dc99398d0725040030d4c9786c861fd"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+                "Size": 29537387,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:976b13f9ef1ad110649609e8622e8b8010c011ee89afb03c87729873a5658b77",
+                "Size": 4622706,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:b63c65d3acaa1b7977b3a20e2479668e65e4fd16d6f119933b550619692b6924",
+                "Size": 47880947,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4dda4739d0071d0fbd8b16db376052d74fe243b097f2ee2e8a709f80db9de63c",
+                "Size": 188,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:197843862cd5ca7e4c4ed2e392193bfc887c974c76ec8062a5aa817cb865fe49",
+                "Size": 6883,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5423b1ef163acc0e896428d8202b11838a3f6a807fadaa677fd38c8a994832f1",
+                "Size": 6195277,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:750c1f9f20a626edb973c89d023aa75078b2013d9b3da3435b2f900dca4e7da7",
+                "Size": 532,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:59b416cfac4330ba1ce4e755ac6d5468fbdab1f7229d9df545aeaf1d465aca16",
+                "Size": 292,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:603b7f7031bb7ccec1befed55cb4117e8ac503ca4f6f04eeb6cbe188a9d04caa",
+                "Size": 22589,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:44743f4d3a6368d0eb1ef2f3232cd16c0aeff10097ec54255ddee64fc15cef01",
+                "Size": 226,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d8aa3bf774d40499cdfb15d4f1b9ef059c8f4609c0e1d0fc14d6a5421fb6a38c",
+                "Size": 696,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:082903342505da399ae7d3cc13b229c695b8a56df27ddad7858f047867814724",
+                "Size": 657,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bf51ff0f7c6a3788ddc84b3a4e229f936bd331e069f62449e7e776998d716fc8",
+                "Size": 356,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ab6208c6e7040ed3d9ed2b55cb33467d8d657c288a9ddbd60dfdf482db5a971f",
+                "Size": 1437473718,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ff3340446ff0de093e1d76b794f2a02d6d4384e3d918eca72ca26f671f4c7146",
+                "Size": 140986,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:511310c94df5413c7e3d133cfb9e7506a30d57884000d5a700eec25429b5a254",
+                "Size": 2492,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e71e55e8d959e1f2859e0c0839488cfe431b4aa486eea32ee1bcd2362220cbcb",
+                "Size": 56297,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e334f5c078fe7acd56e1d4bed5e176386dc99398d0725040030d4c9786c861fd",
+                "Size": 217602868,
+                "Annotations": null
+            }
+        ]
+    },
+    "sb3-cpu": {
+        "Name": "11.0.1.37:9988/goharbor/sb3-cpu",
+        "Digest": "sha256:302f6456d37b5371420c88fdd78c7ed279ab96742830b296abdf2bb91db7df97",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:6414378b647780fee8fd903ddb9541d134a1947ce092d08bdeb23a54cb3684ac",
+            "sha256:13e85b259fdf3af66004c6f1d8fc9a724dbe2f0412542ef92797314dd6a27235",
+            "sha256:f0deaee318d51630a9909e748303ab7c06cb4f5d94e382a0d84b3567b389f8b1",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:c1e66c682edeae8c246852bb69a1d50605a354f4b7e7c3a62c181ed7d98ae5e8",
+            "sha256:da88a7ccd34d79acc0ed5064029dcbd479ef6178008beb11abf2bed1b8616d72",
+            "sha256:96d662ab10f4ce27c36fb393dbfefc5a6a3775da215b28130c10907933afd5d1",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:7b347450f4b2cc62786443c07e6a3ff84c5badf0dc24a1465f0bd5214e68d69a",
+            "sha256:4baa4f6d6b689a205a0145fb1567825803339cc43fff5cd200782511bc43f8fd",
+            "sha256:9e5bc5fca7f48ca8a4f30df7f671fe7bae1bf352ae38a1292bd673b32417f638",
+            "sha256:80339ac7a59a8a8fd8df2384a0a679da7e1ac2a2a313ee2718f66f1d98866786",
+            "sha256:8a8920cb093559df23ac44204db2693f13f7b783f2c52ecdf1d772bc3d96d62d",
+            "sha256:75a7f7adc02ece50c28b97d80af212affed470bdbc0010c91fe6f176e3682675",
+            "sha256:e1105923bc6d75a746f212099f8db513b6cbffde80b3c9f2ba3196af391a8273",
+            "sha256:fffe26c179e25565a1a693c72e57e234ad0a5f1e9747a7305ef8b148ce361cb2",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:e74332f5ff2e0b3518ae6c5eb7bc6d961f3e74ed433a41df1171f01a8c14f717"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:6414378b647780fee8fd903ddb9541d134a1947ce092d08bdeb23a54cb3684ac",
+                "Size": 29535688,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:13e85b259fdf3af66004c6f1d8fc9a724dbe2f0412542ef92797314dd6a27235",
+                "Size": 119848,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f0deaee318d51630a9909e748303ab7c06cb4f5d94e382a0d84b3567b389f8b1",
+                "Size": 6195271,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:c1e66c682edeae8c246852bb69a1d50605a354f4b7e7c3a62c181ed7d98ae5e8",
+                "Size": 525,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:da88a7ccd34d79acc0ed5064029dcbd479ef6178008beb11abf2bed1b8616d72",
+                "Size": 284,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:96d662ab10f4ce27c36fb393dbfefc5a6a3775da215b28130c10907933afd5d1",
+                "Size": 22588,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7b347450f4b2cc62786443c07e6a3ff84c5badf0dc24a1465f0bd5214e68d69a",
+                "Size": 215,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4baa4f6d6b689a205a0145fb1567825803339cc43fff5cd200782511bc43f8fd",
+                "Size": 683,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9e5bc5fca7f48ca8a4f30df7f671fe7bae1bf352ae38a1292bd673b32417f638",
+                "Size": 646,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:80339ac7a59a8a8fd8df2384a0a679da7e1ac2a2a313ee2718f66f1d98866786",
+                "Size": 346,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8a8920cb093559df23ac44204db2693f13f7b783f2c52ecdf1d772bc3d96d62d",
+                "Size": 465605222,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:75a7f7adc02ece50c28b97d80af212affed470bdbc0010c91fe6f176e3682675",
+                "Size": 140985,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e1105923bc6d75a746f212099f8db513b6cbffde80b3c9f2ba3196af391a8273",
+                "Size": 2489,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:fffe26c179e25565a1a693c72e57e234ad0a5f1e9747a7305ef8b148ce361cb2",
+                "Size": 56297,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e74332f5ff2e0b3518ae6c5eb7bc6d961f3e74ed433a41df1171f01a8c14f717",
+                "Size": 217601850,
+                "Annotations": null
+            }
+        ]
+    },
+    "stablediffusion": {
+        "Name": "11.0.1.37:9988/goharbor/stablediffusion",
+        "Digest": "sha256:f7c60b83ce0fc044cb3703daea5ae9050b17f425e7018e626e44543ae6814b94",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:40dd5be53814ae70b2898558673b7ea18d58bf7ab3433560b9ce3cb76d9ff0b1",
+            "sha256:0645c48e225b632d6eadd5a34db26f3aa051a91ce43007b8189a1759f2c0758e",
+            "sha256:8889d023c18ea53dc42fff5ad1d81de2858ca7990ccffb179850543b0877c5e9",
+            "sha256:74115353f57d71e0b7291d9e8c0ebee2b4068925574bf9fbc7119708286c5276",
+            "sha256:9e0ea72fe76c77bca208f180d6349a80d0e8576ae9260542fd9c4892b2acf8df",
+            "sha256:13f51f3f80fd8f1a9a131175cbaf33b432fcf723e22cb28d2c3bda0e0f52e8ad",
+            "sha256:c4ba9103d17de47501645adba914b86b965ab37d0ae612efd74bfa98b7d6cc4e",
+            "sha256:8d9b8d71f868a6810fbb5ef2937b7460ff98cf3c9e8210be32105f1f1c0eed73",
+            "sha256:97badaa6a776948df87a229c0b38266af20a344470d5a7e199a7d98c8c0629b7",
+            "sha256:63041bc7286a0f20672fb30b4bfbd067cc313452d9a600f109add0ecc23e4a6e",
+            "sha256:5f237510596a196844c02f4b78863c55ac8c414d0ab2f300c8538e356ad7e9d7",
+            "sha256:e84ba40a3ba2c73a98e93d3afcb03753d59e08088441657850086bb6d8342f7c",
+            "sha256:3514d699b3b1ba38898c873878a8e57b5ce2c885f3b76c65703a0e6ad6937777",
+            "sha256:ba14cb4333d4290481f02a517c7ef8eaa91a8acba08c3f7b705ffcde4fb5bfab",
+            "sha256:a9fcf2ed00125dd73e47acfeb8e8b2c72c4979f833964f70f1b511b7e4c1ab16",
+            "sha256:e5f07bd4c1f923224fb9e830f761c7a555bdff1e29ee82af748573eeb6d4be8b",
+            "sha256:17c04ad1a7824d2eb827b748aea672d96f35d5b0ac98cdd4c398ac725f850e34",
+            "sha256:cf3a951eff325de29460c5e1fc3682077eea5964fb57dde3a6e32054f04bc3b0",
+            "sha256:7801f9f9ca3ffab02c1b871766b78870ca5775ef34edc7c5a51a4dc74f5a373b",
+            "sha256:c066dd2725b9390bb913b6afd7e47eda723a564c326f578d8cce20e5e1347893",
+            "sha256:ce285dccf473ba30d09e524207a92ddaf4c8c7a1b9a54e665708de1813c77ff7",
+            "sha256:197849cee06a590c9635f44f8427a4c39326bdb58ed844f5bad7dc8cda3e8851",
+            "sha256:f632236aaa178a04a17e24e854e97c1ff2ef7a6b351b4bb50156c659f2052e79",
+            "sha256:d2d345963c76fe19d1bfafb9fba9dc9be690a69a4f1394868b8db45929d25831",
+            "sha256:c8e1dde32a034b76f51da503defb507b3bb95ac0f4069af218c17c7eafed81ae"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:40dd5be53814ae70b2898558673b7ea18d58bf7ab3433560b9ce3cb76d9ff0b1",
+                "Size": 26709108,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:0645c48e225b632d6eadd5a34db26f3aa051a91ce43007b8189a1759f2c0758e",
+                "Size": 7217714,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8889d023c18ea53dc42fff5ad1d81de2858ca7990ccffb179850543b0877c5e9",
+                "Size": 11317746,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:74115353f57d71e0b7291d9e8c0ebee2b4068925574bf9fbc7119708286c5276",
+                "Size": 187,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9e0ea72fe76c77bca208f180d6349a80d0e8576ae9260542fd9c4892b2acf8df",
+                "Size": 6432,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:13f51f3f80fd8f1a9a131175cbaf33b432fcf723e22cb28d2c3bda0e0f52e8ad",
+                "Size": 1021006487,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:c4ba9103d17de47501645adba914b86b965ab37d0ae612efd74bfa98b7d6cc4e",
+                "Size": 63619,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8d9b8d71f868a6810fbb5ef2937b7460ff98cf3c9e8210be32105f1f1c0eed73",
+                "Size": 1220019473,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:97badaa6a776948df87a229c0b38266af20a344470d5a7e199a7d98c8c0629b7",
+                "Size": 89434,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:63041bc7286a0f20672fb30b4bfbd067cc313452d9a600f109add0ecc23e4a6e",
+                "Size": 1866963019,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5f237510596a196844c02f4b78863c55ac8c414d0ab2f300c8538e356ad7e9d7",
+                "Size": 1424764,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e84ba40a3ba2c73a98e93d3afcb03753d59e08088441657850086bb6d8342f7c",
+                "Size": 2925916934,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3514d699b3b1ba38898c873878a8e57b5ce2c885f3b76c65703a0e6ad6937777",
+                "Size": 98,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ba14cb4333d4290481f02a517c7ef8eaa91a8acba08c3f7b705ffcde4fb5bfab",
+                "Size": 144003160,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:a9fcf2ed00125dd73e47acfeb8e8b2c72c4979f833964f70f1b511b7e4c1ab16",
+                "Size": 131,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e5f07bd4c1f923224fb9e830f761c7a555bdff1e29ee82af748573eeb6d4be8b",
+                "Size": 76924526,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:17c04ad1a7824d2eb827b748aea672d96f35d5b0ac98cdd4c398ac725f850e34",
+                "Size": 4006,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:cf3a951eff325de29460c5e1fc3682077eea5964fb57dde3a6e32054f04bc3b0",
+                "Size": 956,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7801f9f9ca3ffab02c1b871766b78870ca5775ef34edc7c5a51a4dc74f5a373b",
+                "Size": 213,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:c066dd2725b9390bb913b6afd7e47eda723a564c326f578d8cce20e5e1347893",
+                "Size": 5558682338,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ce285dccf473ba30d09e524207a92ddaf4c8c7a1b9a54e665708de1813c77ff7",
+                "Size": 216,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:197849cee06a590c9635f44f8427a4c39326bdb58ed844f5bad7dc8cda3e8851",
+                "Size": 341502769,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f632236aaa178a04a17e24e854e97c1ff2ef7a6b351b4bb50156c659f2052e79",
+                "Size": 658,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d2d345963c76fe19d1bfafb9fba9dc9be690a69a4f1394868b8db45929d25831",
+                "Size": 1733,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:c8e1dde32a034b76f51da503defb507b3bb95ac0f4069af218c17c7eafed81ae",
+                "Size": 1742,
+                "Annotations": null
+            }
+        ]
+    },
+    "transformers-gpu": {
+        "Name": "11.0.1.37:9988/goharbor/transformers-gpu",
+        "Digest": "sha256:49bbd37670ca79e17de59fb467603a62079ca19491f595a86f8b45146e4c77a1",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+            "sha256:45f7ea5367fe9dcee002e55e45a888af03a36523d11d2213ef9c6fc0088f6e96",
+            "sha256:3d97a47c3c73a9f0e95e65070cfd89d749b89b490846c2a7ab0b796097d3c12b",
+            "sha256:12cd4d19752f10fb4ec393dc915c62c18895ce0090f0db7773b2426f9059df16",
+            "sha256:da5a484f9d74b1673c155ea49073a322875f9a48118d0d5656c60224c7f8094e",
+            "sha256:5e5846364eee50e93288b9e4085bc9e558ed543163636c9ca2e61a528cb4952d",
+            "sha256:fd355de1d1f25492195368f3c3859f24af856e5d7a2ffb34951776daa50bd3e7",
+            "sha256:3480bb79c6384806f3ae4d8854b5e7ea3e51c3e0ed913965790cdb1ac06cb0c4",
+            "sha256:e7016935dd60c632d835fe53b96c59b79194151f22ed555675a41525e066a99f",
+            "sha256:99541166a1337295206d78a74f33e732d8acee77395b8e4de71f6d80c2dd951c",
+            "sha256:8999112df5b031b628f484c1c2aec564d110232aa865626bf5be629955160ea1",
+            "sha256:656f8da5a68b114e918e55693670f5e005682bf3f75a0cdab7abd60922183483",
+            "sha256:adbec0d6556adaf1c520e23fb145c6c2ec49f781f96857e2a95296722cf17026",
+            "sha256:ff2b592b9b28e58cca7869425085edf96ee1a2bcd1b68cb44d9863c50a70e0c7",
+            "sha256:8eb865367c90c15e21bad160fb602587b37e1e23ce5a8855d48d01a431ac0d91",
+            "sha256:5c09f016008f6de2125c069bc23e56d6a115a984996b514fcc76d287276ca495",
+            "sha256:3986ab9385e75a7ff0b2ebfe5e0410bab8ab74712f3bc791aaf0acdda550a02d",
+            "sha256:399888d0246552a3d6d97c05f752c3ce9f262234b497aa1d382b00778aaebfe5",
+            "sha256:332b43ffcf843df340eac63a8eac003344e84c50ecf3b410e8ce7f47d1aeea02"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+                "Size": 29537387,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:45f7ea5367fe9dcee002e55e45a888af03a36523d11d2213ef9c6fc0088f6e96",
+                "Size": 4622528,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3d97a47c3c73a9f0e95e65070cfd89d749b89b490846c2a7ab0b796097d3c12b",
+                "Size": 55728774,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:12cd4d19752f10fb4ec393dc915c62c18895ce0090f0db7773b2426f9059df16",
+                "Size": 185,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:da5a484f9d74b1673c155ea49073a322875f9a48118d0d5656c60224c7f8094e",
+                "Size": 6886,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5e5846364eee50e93288b9e4085bc9e558ed543163636c9ca2e61a528cb4952d",
+                "Size": 1290798876,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:fd355de1d1f25492195368f3c3859f24af856e5d7a2ffb34951776daa50bd3e7",
+                "Size": 63887,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3480bb79c6384806f3ae4d8854b5e7ea3e51c3e0ed913965790cdb1ac06cb0c4",
+                "Size": 1685,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e7016935dd60c632d835fe53b96c59b79194151f22ed555675a41525e066a99f",
+                "Size": 1523,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:99541166a1337295206d78a74f33e732d8acee77395b8e4de71f6d80c2dd951c",
+                "Size": 2509095639,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8999112df5b031b628f484c1c2aec564d110232aa865626bf5be629955160ea1",
+                "Size": 88434,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:656f8da5a68b114e918e55693670f5e005682bf3f75a0cdab7abd60922183483",
+                "Size": 1472359207,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:adbec0d6556adaf1c520e23fb145c6c2ec49f781f96857e2a95296722cf17026",
+                "Size": 93,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ff2b592b9b28e58cca7869425085edf96ee1a2bcd1b68cb44d9863c50a70e0c7",
+                "Size": 233827161,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8eb865367c90c15e21bad160fb602587b37e1e23ce5a8855d48d01a431ac0d91",
+                "Size": 19082302,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5c09f016008f6de2125c069bc23e56d6a115a984996b514fcc76d287276ca495",
+                "Size": 1017495,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3986ab9385e75a7ff0b2ebfe5e0410bab8ab74712f3bc791aaf0acdda550a02d",
+                "Size": 2938758838,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:399888d0246552a3d6d97c05f752c3ce9f262234b497aa1d382b00778aaebfe5",
+                "Size": 101493687,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:332b43ffcf843df340eac63a8eac003344e84c50ecf3b410e8ce7f47d1aeea02",
+                "Size": 23307,
+                "Annotations": null
+            }
+        ]
+    },
+    "transformers-cpu": {
+        "Name": "11.0.1.37:9988/goharbor/transformers-cpu",
+        "Digest": "sha256:74cafd746c928a1608a677598f72e3f6743f298af13d520962c50dc6ca82337d",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+            "sha256:ae17c88c7d53cc98a779a4016294a41ea8252aeda7313b2626e3e0d710eab6b1",
+            "sha256:08ebcf91c6203262d7c7664ec69e4291568a7140d510c3d76772cb8f070e9644",
+            "sha256:9f1673b825005e922db77ccb96cb55009a79969d17899da0716a092959560ef2",
+            "sha256:7cc4264cf9777438059e008f346c160d8a05789ecd722b1b6908c82aacf30947",
+            "sha256:27ba311f7772e2812c19dab99800a274b9d259e77cce84a2ee183e866e9f71b8",
+            "sha256:73d9be18939cd15ee598b8065e513d206dcc13d3d4d98c6285575a120252af5a",
+            "sha256:b0ccb0ddf44a98c204844a4626277746708d3c309540f16b4dbaa924e4fb6d9a",
+            "sha256:aa95549369083e8e3d3f9a1816caf5e0d840031c5218a451104d4d3a586654d9",
+            "sha256:efb56f0ac94a5941a1e5b873c88d7321543364d715e1711533263129eeb02301",
+            "sha256:3b91c5ca215fef9e31de96e08a9f2fbfcb235d42eac016141fec5dee9542a91e"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+                "Size": 28230143,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ae17c88c7d53cc98a779a4016294a41ea8252aeda7313b2626e3e0d710eab6b1",
+                "Size": 3514114,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:08ebcf91c6203262d7c7664ec69e4291568a7140d510c3d76772cb8f070e9644",
+                "Size": 14938021,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9f1673b825005e922db77ccb96cb55009a79969d17899da0716a092959560ef2",
+                "Size": 249,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7cc4264cf9777438059e008f346c160d8a05789ecd722b1b6908c82aacf30947",
+                "Size": 93,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:27ba311f7772e2812c19dab99800a274b9d259e77cce84a2ee183e866e9f71b8",
+                "Size": 146330627,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:73d9be18939cd15ee598b8065e513d206dcc13d3d4d98c6285575a120252af5a",
+                "Size": 19082294,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:b0ccb0ddf44a98c204844a4626277746708d3c309540f16b4dbaa924e4fb6d9a",
+                "Size": 1017495,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aa95549369083e8e3d3f9a1816caf5e0d840031c5218a451104d4d3a586654d9",
+                "Size": 269834106,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:efb56f0ac94a5941a1e5b873c88d7321543364d715e1711533263129eeb02301",
+                "Size": 61808904,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3b91c5ca215fef9e31de96e08a9f2fbfcb235d42eac016141fec5dee9542a91e",
+                "Size": 23294,
+                "Annotations": null
+            }
+        ]
+    },
+    "transformers": {
+        "Name": "11.0.1.37:9988/goharbor/transformers",
+        "Digest": "sha256:1b25a5dc79b06887e8a82a5a54bc4d3cb810c8d8972288ac90d0cd09bdee9f88",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+            "sha256:ae17c88c7d53cc98a779a4016294a41ea8252aeda7313b2626e3e0d710eab6b1",
+            "sha256:08ebcf91c6203262d7c7664ec69e4291568a7140d510c3d76772cb8f070e9644",
+            "sha256:9f1673b825005e922db77ccb96cb55009a79969d17899da0716a092959560ef2",
+            "sha256:7cc4264cf9777438059e008f346c160d8a05789ecd722b1b6908c82aacf30947",
+            "sha256:27ba311f7772e2812c19dab99800a274b9d259e77cce84a2ee183e866e9f71b8",
+            "sha256:73d9be18939cd15ee598b8065e513d206dcc13d3d4d98c6285575a120252af5a",
+            "sha256:b0ccb0ddf44a98c204844a4626277746708d3c309540f16b4dbaa924e4fb6d9a",
+            "sha256:aa95549369083e8e3d3f9a1816caf5e0d840031c5218a451104d4d3a586654d9",
+            "sha256:efb56f0ac94a5941a1e5b873c88d7321543364d715e1711533263129eeb02301",
+            "sha256:3b91c5ca215fef9e31de96e08a9f2fbfcb235d42eac016141fec5dee9542a91e"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+                "Size": 28230143,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ae17c88c7d53cc98a779a4016294a41ea8252aeda7313b2626e3e0d710eab6b1",
+                "Size": 3514114,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:08ebcf91c6203262d7c7664ec69e4291568a7140d510c3d76772cb8f070e9644",
+                "Size": 14938021,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9f1673b825005e922db77ccb96cb55009a79969d17899da0716a092959560ef2",
+                "Size": 249,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7cc4264cf9777438059e008f346c160d8a05789ecd722b1b6908c82aacf30947",
+                "Size": 93,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:27ba311f7772e2812c19dab99800a274b9d259e77cce84a2ee183e866e9f71b8",
+                "Size": 146330627,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:73d9be18939cd15ee598b8065e513d206dcc13d3d4d98c6285575a120252af5a",
+                "Size": 19082294,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:b0ccb0ddf44a98c204844a4626277746708d3c309540f16b4dbaa924e4fb6d9a",
+                "Size": 1017495,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aa95549369083e8e3d3f9a1816caf5e0d840031c5218a451104d4d3a586654d9",
+                "Size": 269834106,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:efb56f0ac94a5941a1e5b873c88d7321543364d715e1711533263129eeb02301",
+                "Size": 61808904,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3b91c5ca215fef9e31de96e08a9f2fbfcb235d42eac016141fec5dee9542a91e",
+                "Size": 23294,
+                "Annotations": null
+            }
+        ]
+    },
+    "tts": {
+        "Name": "11.0.1.37:9988/goharbor/tts",
+        "Digest": "sha256:bd00a3cfe0f3e8a1bad3e73196446544a4db68b24b54f5c1b00cbdb0be19238a",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+            "sha256:5e3b7ee7738140e8f4608c3945b6e1ed4f9fb75db53a04e19ba0a6661e7cc4fe",
+            "sha256:5bd037f007fdda13ae5a5f43a199d6677db1f9059c2980c84726e3a43fab169a",
+            "sha256:4cda774ad2ecef28c9a1cd97594f7199071c83769f91c5d109eb1cb6770ecdff",
+            "sha256:775f22adee620daec0db645bad7027db4c1ecf22520412e1b2466fc73d54d19b",
+            "sha256:bbdf7a0ca7b8de15d025dacb7e9c2edf9fdd67dca42a6b3e7e70d6458e7a67d7",
+            "sha256:8a6377c57f0501f3b299653fb7cd07dca223f51164c344a0a65af8e541f0d4f9",
+            "sha256:57dc4d26fa4d479c7be2d1ba16a7e9a3623f07c2c199e64d3da000bfe8ee44ea",
+            "sha256:e11cb449e1cbec12a6539a8492c5a2daf13e4012be29244bf3ad3b8573f19162",
+            "sha256:6e558a3519f99ae7407b55961f5dc5ce190d93c34c8ebe1e42323e0188f69a5b",
+            "sha256:388e0be8a1c8394ba7b80d54c41bb062f86803d93b2db9e5f7325e69842d1ff1",
+            "sha256:3698412e3d7d27009256a581019084ddd1bacb6b4683a1585b40d9b2fe620413",
+            "sha256:f49e10eb5d65b3169104a5ecb99a4a92b196864aad27d888a1bf06e6590fc0bc",
+            "sha256:8569db2efb40e57f24489ca4d7cf2444decdc1e072eb290eb8b1c1529e662e22",
+            "sha256:9618ab186bc6285e8272c561ae2b157b71473627def0ae803181d1e354c62573"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:aece8493d3972efa43bfd4ee3cdba659c0f787f8f59c82fb3e48c87cbb22a12e",
+                "Size": 29537387,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5e3b7ee7738140e8f4608c3945b6e1ed4f9fb75db53a04e19ba0a6661e7cc4fe",
+                "Size": 4622662,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:5bd037f007fdda13ae5a5f43a199d6677db1f9059c2980c84726e3a43fab169a",
+                "Size": 56227657,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4cda774ad2ecef28c9a1cd97594f7199071c83769f91c5d109eb1cb6770ecdff",
+                "Size": 188,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:775f22adee620daec0db645bad7027db4c1ecf22520412e1b2466fc73d54d19b",
+                "Size": 6885,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bbdf7a0ca7b8de15d025dacb7e9c2edf9fdd67dca42a6b3e7e70d6458e7a67d7",
+                "Size": 72625884,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8a6377c57f0501f3b299653fb7cd07dca223f51164c344a0a65af8e541f0d4f9",
+                "Size": 129690828,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:57dc4d26fa4d479c7be2d1ba16a7e9a3623f07c2c199e64d3da000bfe8ee44ea",
+                "Size": 85728559,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e11cb449e1cbec12a6539a8492c5a2daf13e4012be29244bf3ad3b8573f19162",
+                "Size": 4879594643,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:6e558a3519f99ae7407b55961f5dc5ce190d93c34c8ebe1e42323e0188f69a5b",
+                "Size": 152,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:388e0be8a1c8394ba7b80d54c41bb062f86803d93b2db9e5f7325e69842d1ff1",
+                "Size": 114,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3698412e3d7d27009256a581019084ddd1bacb6b4683a1585b40d9b2fe620413",
+                "Size": 21839503,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:f49e10eb5d65b3169104a5ecb99a4a92b196864aad27d888a1bf06e6590fc0bc",
+                "Size": 162,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:8569db2efb40e57f24489ca4d7cf2444decdc1e072eb290eb8b1c1529e662e22",
+                "Size": 759,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:9618ab186bc6285e8272c561ae2b157b71473627def0ae803181d1e354c62573",
+                "Size": 1680612827,
+                "Annotations": null
+            }
+        ]
+    },
+    "whisper": {
+        "Name": "11.0.1.37:9988/goharbor/whisper",
+        "Digest": "sha256:c8129e11833854eb3859b782f2d2c87bf2f0a0b5a6999d25633d630c2755186a",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+            "sha256:0ebcc011f0ec7a9a900f7366b104730396a59032e64f04f3867a75f25ed48280",
+            "sha256:92d63ec5cbeb1348bad42929919fd8e78f38d96e388b5509d2929d76ddafb48e",
+            "sha256:64b78282ca88b226c404cb8dfdee72b75eea52c9ac7380c0439b6e03992e483f",
+            "sha256:66468536966b509bb0c82663327286f4407d5a19110da7cb50f9fda7b98cb5ea",
+            "sha256:dc0a40137edff1627c154e3a6c3fbd1e7405f979a5d0f9d0f252d4dff0e2c204",
+            "sha256:cb0b534078ce6833b2462b78091073f9ca7cd7770e620cb23e85790100528c34",
+            "sha256:b2ec6b8f2d7f6070fc7276777d47db7198bda6e40e82091f69a3414c2c4e89a1",
+            "sha256:eb94eaef5c248e93afc7781ec66c664ff2457e9d9f451131da244fe15cd62857",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3da95a905ed546f99c4564407923a681757d89651a388ec3f1f5e9bf5ed0b39d",
+                "Size": 28230143,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:0ebcc011f0ec7a9a900f7366b104730396a59032e64f04f3867a75f25ed48280",
+                "Size": 3514121,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:92d63ec5cbeb1348bad42929919fd8e78f38d96e388b5509d2929d76ddafb48e",
+                "Size": 15649770,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:64b78282ca88b226c404cb8dfdee72b75eea52c9ac7380c0439b6e03992e483f",
+                "Size": 248,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:66468536966b509bb0c82663327286f4407d5a19110da7cb50f9fda7b98cb5ea",
+                "Size": 93,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:dc0a40137edff1627c154e3a6c3fbd1e7405f979a5d0f9d0f252d4dff0e2c204",
+                "Size": 7253796,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:cb0b534078ce6833b2462b78091073f9ca7cd7770e620cb23e85790100528c34",
+                "Size": 15188156,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:b2ec6b8f2d7f6070fc7276777d47db7198bda6e40e82091f69a3414c2c4e89a1",
+                "Size": 237998467,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:eb94eaef5c248e93afc7781ec66c664ff2457e9d9f451131da244fe15cd62857",
+                "Size": 2970082672,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            }
+        ]
+    },
+    "yolo11-gpu": {
+        "Name": "11.0.1.37:9988/goharbor/yolo11-gpu",
+        "Digest": "sha256:59aebe60e00b57f115baaafd3701dbcfdb1d1e54d4dba71f8872f4ce3c411473",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:2ec76a50fe7c8d5db9ec25590b9217e14e3920513c6e7b5be55db72a16b55f7c",
+            "sha256:7e61b0f758fc9403904ce4d142bac68d88d6f3721bcec8056a24ccae47c75edb",
+            "sha256:e65ed687208ba4c9878e8960d746a03f154aa9b4f37ac05153364445d539162f",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:56aefa055df8838775b05f7d751e79d23c05019d3cba76b5e8eafde9d6e5c215",
+            "sha256:fd89e98ac821f610e53f0c48368a8c4f8bc82426e4e296045428068f64077030",
+            "sha256:d51939ea63f2af7debdc6ce46cc59188372ff70f2b5b6c410ac3318cb14f02de",
+            "sha256:bd959e98464141fbb985aa735ffbfdab889f3417e72939326971037e80707fc6",
+            "sha256:65c73588f9dd41b6e63ed7d4feab7e08376f99748395ded994f4361d6eae6fb4",
+            "sha256:cf46b955163594a01f081f7698c4ff246c600c4f55e5ffdb78096d4734ebccba",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:29f05ff54558793317ef8d6b4fb4503faf09d9ab445b3b41208a4f1e65c7d238",
+            "sha256:85aedd54c5f0410e3cf2dd728defc0eee87b6351e1d4550791e59c79dbcddb9a",
+            "sha256:3ca1d0b922a0e16f465cc39dd677fb1c66621720f1e0d878c17b17f15b024ff3",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:2ec76a50fe7c8d5db9ec25590b9217e14e3920513c6e7b5be55db72a16b55f7c",
+                "Size": 30439283,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:7e61b0f758fc9403904ce4d142bac68d88d6f3721bcec8056a24ccae47c75edb",
+                "Size": 7210688,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e65ed687208ba4c9878e8960d746a03f154aa9b4f37ac05153364445d539162f",
+                "Size": 3686275866,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:56aefa055df8838775b05f7d751e79d23c05019d3cba76b5e8eafde9d6e5c215",
+                "Size": 99,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:fd89e98ac821f610e53f0c48368a8c4f8bc82426e4e296045428068f64077030",
+                "Size": 15775411,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d51939ea63f2af7debdc6ce46cc59188372ff70f2b5b6c410ac3318cb14f02de",
+                "Size": 180760194,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:bd959e98464141fbb985aa735ffbfdab889f3417e72939326971037e80707fc6",
+                "Size": 1037,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:65c73588f9dd41b6e63ed7d4feab7e08376f99748395ded994f4361d6eae6fb4",
+                "Size": 101,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:cf46b955163594a01f081f7698c4ff246c600c4f55e5ffdb78096d4734ebccba",
+                "Size": 1510103,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:29f05ff54558793317ef8d6b4fb4503faf09d9ab445b3b41208a4f1e65c7d238",
+                "Size": 5025519,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:85aedd54c5f0410e3cf2dd728defc0eee87b6351e1d4550791e59c79dbcddb9a",
+                "Size": 3359763,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:3ca1d0b922a0e16f465cc39dd677fb1c66621720f1e0d878c17b17f15b024ff3",
+                "Size": 1282409709,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            }
+        ]
+    },
+    "yolo11-cpu": {
+        "Name": "11.0.1.37:9988/goharbor/yolo11-cpu",
+        "Digest": "sha256:339756b92c908a91c501fc537c8f34efbb07699b6d358c91abde33a0616958ef",
+        "RepoTags": [
+            "latest"
+        ],
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Layers": [
+            "sha256:cd0bff360addc3363f9442a3e0b72ff44a74ccc0120d0fc49dfe793035242642",
+            "sha256:d75823517d96b2c14448b8688dc8c09ec526c14268b7606f1cecfe8e548cc98f",
+            "sha256:6fb13bdbc6fb9e9af3d104707a2db221fc109055811688be6a70f20372482e2c",
+            "sha256:73196a9af95469770b0ed81c9d08d7c2853cb21b6f6d9056f95bc793d83d55e9",
+            "sha256:efb1eaf8ce625c6623129c7d332412c11bd3c9d321a0640a14bef294c043423e",
+            "sha256:cf46b955163594a01f081f7698c4ff246c600c4f55e5ffdb78096d4734ebccba",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+            "sha256:93933a4c79f2835cfdde406e5ba62e0eb34f979056c65d9e312d98d656ad3ec1",
+            "sha256:e6cde940e0f2987e44404a9d3fe5d71e59b267cf7ee8b6d544f5752d21999367",
+            "sha256:85edb79302427fd6c39a3aba9a0c1bf0d1085f8d00181261cc9fdc2944f501ef",
+            "sha256:dd7f6a9aa259f8c9a2860bab3528b4e5a6add1550d7735b43aa30295e8c493b6",
+            "sha256:ad54cd1a1153722224bdf52fb48eb7b48937b6dbb80dab35f1e07a930c55f226",
+            "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1"
+        ],
+        "LayersData": [
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:cd0bff360addc3363f9442a3e0b72ff44a74ccc0120d0fc49dfe793035242642",
+                "Size": 27234148,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:d75823517d96b2c14448b8688dc8c09ec526c14268b7606f1cecfe8e548cc98f",
+                "Size": 15775410,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:6fb13bdbc6fb9e9af3d104707a2db221fc109055811688be6a70f20372482e2c",
+                "Size": 726,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:73196a9af95469770b0ed81c9d08d7c2853cb21b6f6d9056f95bc793d83d55e9",
+                "Size": 214566037,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:efb1eaf8ce625c6623129c7d332412c11bd3c9d321a0640a14bef294c043423e",
+                "Size": 101,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:cf46b955163594a01f081f7698c4ff246c600c4f55e5ffdb78096d4734ebccba",
+                "Size": 1510103,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:93933a4c79f2835cfdde406e5ba62e0eb34f979056c65d9e312d98d656ad3ec1",
+                "Size": 5025525,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:e6cde940e0f2987e44404a9d3fe5d71e59b267cf7ee8b6d544f5752d21999367",
+                "Size": 4164080,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:85edb79302427fd6c39a3aba9a0c1bf0d1085f8d00181261cc9fdc2944f501ef",
+                "Size": 244808493,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:dd7f6a9aa259f8c9a2860bab3528b4e5a6add1550d7735b43aa30295e8c493b6",
+                "Size": 182890800,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:ad54cd1a1153722224bdf52fb48eb7b48937b6dbb80dab35f1e07a930c55f226",
+                "Size": 153,
+                "Annotations": null
+            },
+            {
+                "MIMEType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                "Digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+                "Size": 32,
+                "Annotations": null
+            }
+        ]
+    }
+}

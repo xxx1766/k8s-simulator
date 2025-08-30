@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Set, Optional, Iterable
 import math
 import json
+import threading
 
 testBundle = [
     "clip",
@@ -23,33 +24,8 @@ mb = 1024 * 1024
 minThreshold = 20 * mb  # 20971520
 maxContainerThreshold = 100 * mb  # 104857600
 
-def updateLocalBundlesList(node):
-    # need lock for each node
-    pass
-
-def getLocalBundlesList(node):
-    # simulate get pulled images from node
-    pass
-
-def bundleHandler(node, bundle, action):
-    # action: pull / remove
-    pass
-
-def bundleScore():
-    # get & calculate score for each bundle
-    # return max_score bundle id
-
-    pass
-
-def sumScore():
-
-    pass
-def calculatePriority():
-    # calculate priority score for a bundle on a node
-    # return score
-    pass
-
 # only read info
+@dataclass
 class BundleMeta:
     prefabSizes: Dict[str, int] 
     allPrefabIDs: Set[str]
@@ -60,16 +36,16 @@ def buildBundleCatalog(appJSON: Dict) -> Dict[str, BundleMeta]:
     # { bundle_name -> {"taskc": [...], "prefabs": { prefabID: size, ... } }, ... }
     catalog: Dict[str, BundleMeta] = {}
     for bundle_name, entry in appJSON.items():
-        prefabSizes = {}
-        allIDs = set()
+        prefabSizes: Dict[str, int] = {}
+        allIDs: Set[str] = set()
 
-        if "taskc" in entry and entry["taskc"]:
-            p = entry["taskc"]
-            prefabSizes[p["prefabID"]] = int64(p["prefabSize"])
-            allIDs.add(p["prefabID"])
+        taskc = entry.get("taskc")
+        if taskc:
+            prefabSizes[taskc["prefabID"]] = int(taskc["prefabSize"])
+            allIDs.add(taskc["prefabID"])
 
-        if "prefabs" in entry.get("prefabs", []):
-            prefabSizes[p["prefabID"]] = int64(p["prefabSize"])
+        for p in entry.get("prefabs", []):
+            prefabSizes[p["prefabID"]] = int(p["prefabSize"])
             allIDs.add(p["prefabID"])
         
         totalSize = sum(prefabSizes.values())
@@ -80,11 +56,14 @@ def buildBundleCatalog(appJSON: Dict) -> Dict[str, BundleMeta]:
     return catalog
 
 # when running
+@dataclass
 class NodeState:
     pods: Set[str] = field(default_factory=set)
     # bundleName -> set(prefabIDs) # pulled images
     cache: Dict[str, Set[str]] = field(default_factory=dict)
+    lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
+@dataclass
 class PodSpec:
     # buddleName -> set(prefabIDs) | None  # None means all prefabs are needed in this bundle
     requirements: Dict[str, Optional[Set[str]]] 
@@ -95,64 +74,78 @@ class SimulatorState:
         self.catalog = bundleCatalog
         self.nodes: Dict[str, NodeState] = {nid: NodeState() for nid in nodeIDs}
         self.pods: Dict[str, PodSpec] = {}
+        self.podsLock = threading.Lock()
 
     # calculate the score for a pod on a node
     def scoreNodeForPod(self, nodeID: str, pod: PodSpec) -> int:
         node = self.nodes[nodeID]
-        rawBytes = 0
 
+        # 获锁后获取快照
+        with node.lock:
+            podsCount = len(node.pods)
+            cacheSnapshot = {b: ids.copy() for b, ids in node.cache.items()}
+
+
+        rawBytes = 0
         for bundle, req in pod.requirements.items():
-            meta = self.catalog[nodeID]
+            meta =  self.catalog.get(bundle)
             if not meta:
                 continue
             needIDs = meta.allPrefabIDs if req is None else req
-            haveIDs = node.cache.get(bundle, set())
+            haveIDs = cacheSnapshot.get(bundle, set())
 
             for pid in needIDs:
-                if pid not in haveIDs:
+                if pid in haveIDs:
                     rawBytes += meta.prefabSizes.get(pid, 0)
 
-        factor = math.sqrt(len(node.pods) + 1)
+        factor = math.sqrt(podsCount + 1)
         return int(rawBytes /factor)
     
     def bindPodToNode(self, nodeID: str, podID: str, pod: PodSpec):
-        self.pods[podID] = pod
+        with self.podsLock:
+            self.pods[podID] = pod
+        
         node = self.nodes[nodeID]
-        node.pods.add(podID)
+        with node.lock:
+            if podID in node.pods:
+                return
+            node.pods.add(podID)
 
-        for bundle, req in pod.requirements.items():
-            meta = self.catalog.get(bundle)
-            if not meta:
-                continue
-            needIDs = meta.allPrefabIDs if req is None else req
-            bucket = node.cache.setdefault(bundle, set())
-            # 加入缓存（set 去重，不会重复计）
-            bucket.update(pid for pid in needIDs if pid in meta.prefabSizes)
-
-    def unbindPodFromNode(self, nodeID: str, podID: str, clearCache: bool = False):
-        node = self.nodes[nodeID]
-        pod = self.pods.get(podID)
-        if podID in node:
-            node.pods.remove(podID)
-        if clearCache and pod:
             for bundle, req in pod.requirements.items():
                 meta = self.catalog.get(bundle)
                 if not meta:
                     continue
                 needIDs = meta.allPrefabIDs if req is None else req
-                haveIDs = node.cache.get(bundle, set())
-                if haveIDs:
-                    haveIDs.difference_update(needIDs)
-                    if not haveIDs:
-                        node.cache.pop(bundle, None)
-        self.pods.pop(podID, None)
+                bucket = node.cache.setdefault(bundle, set())
+                # 加入缓存（set 去重，不会重复计）
+                bucket.update(pid for pid in needIDs if pid in meta.prefabSizes)
+
+    def unbindPodFromNode(self, nodeID: str, podID: str, clearCache: bool = False):
+        node = self.nodes[nodeID]
+        with self.podsLock:
+            pod = self.pods.get(podID)
+
+        with node.lock:
+            if podID in node.pods:
+                node.pods.remove(podID)
+            if clearCache and pod:
+                for bundle, req in pod.requirements.items():
+                    meta = self.catalog.get(bundle)
+                    if not meta:
+                        continue
+                    needIDs = meta.allPrefabIDs if req is None else req
+                    haveIDs = node.cache.get(bundle, set())
+                    if haveIDs:
+                        haveIDs.difference_update(needIDs)
+                        if not haveIDs:
+                            node.cache.pop(bundle, None)
+        with self.podsLock:
+            self.pods.pop(podID, None)
 
 def loadAppJSON(path: str) -> Dict:
     with open(path, "r") as f:
         return json.load(f)
-    
-def int64(x) -> int:
-    return int(x) & 0xFFFFFFFFFFFFFFFF
+
 
 if __name__ == "__main__":
     appJSON = loadAppJSON("apps.json")
@@ -161,12 +154,14 @@ if __name__ == "__main__":
     nodeIDs = [f"worker-{i}" for i in range(1, 1001)]
     state = SimulatorState(catalog, nodeIDs)
 
-    podA = PodSpec(requirements={"clip": None})
-    scores = [(nid, state.scoreNodeForPod(nid, podA)) for nid in nodeIDs[:3]]
-    print("scores before bind:", scores)
+    # podA = PodSpec(requirements={"clip": None})
+    # scores = [(nid, state.scoreNodeForPod(nid, podA)) for nid in nodeIDs[:3]]
+    # print("scores before bind:", scores)
 
-     # 绑定到 node-0，视作缓存拉取完成
-    state.bind_pod("node-0", "pod-A", podA)
+    # # 绑定到 worker-1，视作缓存拉取完成
+    # state.bindPodToNode("worker-1", "pod-A", podA)
+    # # 再次给 worker-1 打分：此时应 > 0（已命中本地缓存）
+    # print("worker-1 score now:", state.scoreNodeForPod("worker-1", podA))
 
-     # 再次给 node-0 打分：此时应 > 0（已命中本地缓存）
-    print("node-0 score now:", state.score_node_for_pod("node-0", podA))
+    # get task seqs
+    

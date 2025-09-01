@@ -21,7 +21,7 @@ def run(cmd, stdin_str=None):
         raise RuntimeError(f"cmd failed: {' '.join(cmd)}\nstdout:\n{out}\nstderr:\n{err}")
     return out
 
-def create_node(idx: int, cpu="4", mem="8Gi", pods="110"):
+def create_node(idx: int, cpu="4", mem="8Gi", pods="110", storage="50Gi"):
     name = f"worker-{idx}"
     # 1) 创建 Node（metadata + labels）
     yaml_doc = f"""apiVersion: v1
@@ -47,11 +47,13 @@ metadata:
                 "cpu": str(cpu),
                 "memory": str(mem),
                 "pods": str(pods),
+                "ephemeral-storage": str(storage),
             },
             "allocatable": {
                 "cpu": str(cpu),
                 "memory": str(mem),
                 "pods": str(pods),
+                "ephemeral-storage": str(storage),
             },
             "addresses": [
                 {"type": "InternalIP", "address": f"10.0.{idx//250}.{idx%250+1}"},
@@ -83,4 +85,4 @@ def main(total=1000, workers=32):
     print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
 
 if __name__ == "__main__":
-    main(total=1000, workers=32)
+    main(total=10, workers=32)

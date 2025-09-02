@@ -13,6 +13,7 @@ testconfig:
   JOB_SEQ_FILE: test20.json
   RESULT_FILE: ./rest.txt
   BANDWIDTH: 100 # MB
+  NODE_NUM: 1000
   MAX_POD_CONCURRENCY: 8
   PULL_STRATEGY: 1 # 1=拉取前记录, 2=拉取完再记录
   BUNDLE_NAMES :

@@ -128,7 +128,7 @@ JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
 BANDWIDTH = 100
-
+NODE_NUM = 10
 mb = 1024 * 1024
 gb = 1024 * mb
 minThreshold = 20 * mb  # 20971520
@@ -660,18 +660,25 @@ def pick_best_node(
 
     return bestNid
 
+def printCatalog():
+    pass
+    
+def printState():
+    pass
+
 if __name__ == "__main__":
-    simulateFlag = 1  # 0=不模拟真实时间，1=模拟真实时间
+    simulateFlag = 1
     appJSON = loadAppJSON("apps.json")
+    # appJSON = loadAppJSON(BUNDLE_CACHE_FILE) 
     catalog = buildBundleCatalog(appJSON)
+    
 
-    # nodeIDs = [f"worker-{i}" for i in range(1, 1001)]
-    nodeIDs = [f"worker-{i}" for i in range(1, 11)]
-    state = SimulatorState(catalog, nodeIDs, networkBW=100*mb)
-    state.pullStrategy = 1
+    nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
+    state = SimulatorState(catalog, nodeIDs, networkBW=BANDWIDTH*mb)
+    state.pullStrategy = PULL_STRATEGY
 
-    # events = load_simulation_events("2017-10-06-Simulation.json")
     events =load_simulation_events("test20.json")
+    # events =load_simulation_events(JOB_SEQ_FILE)
     t0 = time.monotonic()
     scheduledCount = 0
     print("job, node, start_time, end_time, eta, running_pods")

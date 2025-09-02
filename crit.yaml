@@ -1,0 +1,27 @@
+environment:
+  KUBE_SERVER: &kube_server http://localhost:3131
+  NAMESPACE: &namespace default
+  KUBECTL_BASE:
+    - kubectl
+    - --server
+    - *kube_server
+    - --insecure-skip-tls-verify=true
+    - --namespace
+    - *namespace
+testconfig:
+  BUNDLE_CACHE_FILE: apps.json
+  JOB_SEQ_FILE: test20.json
+  RESULT_FILE: ./rest.txt
+  BANDWIDTH: 100 # MB
+  MAX_POD_CONCURRENCY: 8
+  PULL_STRATEGY: 1 # 1=拉取前记录, 2=拉取完再记录
+  BUNDLE_NAMES :
+    - clip
+    - lora
+    - sam2
+    - sb3
+    - stablediffusion
+    - transformers
+    - tts
+    - whisper
+    - yolo11

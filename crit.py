@@ -125,6 +125,9 @@ BUNDLE_NAMES = [
     "yolo11"
 ]
 JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+MAX_POD_CONCURRENCY = 8
+PULL_STRATEGY = 1
+BANDWIDTH = 100
 
 mb = 1024 * 1024
 gb = 1024 * mb
@@ -202,7 +205,7 @@ class SimulatorState:
         self.pods: Dict[str, PodSpec] = {}
         self.podsLock = threading.Lock()
         self.networkBW = networkBW
-        self.pullStrategy = 1 # 1=拉取前记录, 2=拉取完再记录
+        self.pullStrategy = PULL_STRATEGY # 1=拉取前记录, 2=拉取完再记录
         
         # 按节点记录“执行忙碌到”的绝对时间戳（单节点串行/队列假设）
         self.nodeExecBusyUntil: Dict[str, float] = {nid: 0.0 for nid in nodeIDs}
@@ -210,7 +213,7 @@ class SimulatorState:
         # 结构：podID -> {node, job_start_at, job_end_at, compute_ready_at, data_ready_at, eta, ready_at}
         self.jobRecords: Dict[str, Dict[str, float]] = {}
         self.nodeExecHeaps: Dict[str, List[float]] = {nid: [] for nid in nodeIDs}
-        self.nodePodLimit: int = 8
+        self.nodePodLimit: int = MAX_POD_CONCURRENCY
 
     # calculate the score for a pod on a node
     # def scoreNodeForPod_old(self, nodeID: str, pod: PodSpec) -> int:

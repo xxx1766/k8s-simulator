@@ -210,7 +210,7 @@ class SimulatorState:
         # 结构：podID -> {node, job_start_at, job_end_at, compute_ready_at, data_ready_at, eta, ready_at}
         self.jobRecords: Dict[str, Dict[str, float]] = {}
         self.nodeExecHeaps: Dict[str, List[float]] = {nid: [] for nid in nodeIDs}
-        self.nodePodLimit: int = 2
+        self.nodePodLimit: int = 8
 
     # calculate the score for a pod on a node
     # def scoreNodeForPod_old(self, nodeID: str, pod: PodSpec) -> int:

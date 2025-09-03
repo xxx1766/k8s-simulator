@@ -12,6 +12,7 @@ testconfig:
   BUNDLE_CACHE_FILE: apps.json
   JOB_SEQ_FILE: test20.json
   RESULT_FILE: ./rest.txt
+  DISKSIZW: 50 # GB
   BANDWIDTH: 100 # MB
   NODE_NUM: 1000
   MAX_POD_CONCURRENCY: 8

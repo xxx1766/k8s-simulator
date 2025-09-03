@@ -128,11 +128,13 @@ JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
 BANDWIDTH = 100
-NODE_NUM = 10
-mb = 1024 * 1024
-gb = 1024 * mb
-minThreshold = 20 * mb  # 20971520
-maxContainerThreshold = 100 * mb  # 104857600
+NODE_NUM = 1000
+MB = 1024 * 1024
+GB = 1024 * MB
+MIN_THRESHOLD = 20 * MB  
+MAX_CONTAINER_THRESHOLD = 2 * GB  # 104857600
+MIN_NODE_SCORE  = 0
+MAX_NODE_SCORE  = 100
 
 # only read info
 @dataclass
@@ -169,7 +171,7 @@ def buildBundleCatalog(appJSON: Dict) -> Dict[str, BundleMeta]:
 @dataclass
 class PullTask:
     nodeID: str
-    bundle: str
+    prefab: str
     prefabID: Set[str]           
     totalBytes: int
     startTime: float
@@ -188,7 +190,7 @@ class NodeState:
     pullTasks: List[PullTask] = field(default_factory=list)  # 按时间排队的拉取任务  
     pullBusyUntil: float = 0.0                               # 节点串行拉取队列忙到的时间戳 
 
-    diskCapacityBytes: int = 500 * gb
+    diskCapacityBytes: int = 500 * GB
     bytesCache: int = 0  
     bytesPulling: int = 0
 
@@ -199,7 +201,7 @@ class PodSpec:
 
 # simulating
 class SimulatorState:
-    def __init__(self, bundleCatalog: Dict[str, BundleMeta], nodeIDs: Iterable[str], networkBW: float = 100*mb):
+    def __init__(self, bundleCatalog: Dict[str, BundleMeta], nodeIDs: Iterable[str], networkBW: float = 100*MB):
         self.catalog = bundleCatalog
         self.nodes: Dict[str, NodeState] = {nid: NodeState() for nid in nodeIDs}
         self.pods: Dict[str, PodSpec] = {}
@@ -215,52 +217,8 @@ class SimulatorState:
         self.nodeExecHeaps: Dict[str, List[float]] = {nid: [] for nid in nodeIDs}
         self.nodePodLimit: int = MAX_POD_CONCURRENCY
 
-    # calculate the score for a pod on a node
-    # def scoreNodeForPod_old(self, nodeID: str, pod: PodSpec) -> int:
-    #     node = self.nodes[nodeID]
-
-    #     # 获锁后获取快照
-    #     with node.lock:
-    #         podsCount = len(node.pods)
-    #         cacheSnapshot = {b: ids.copy() for b, ids in node.cache.items()}
-
-
-    #     rawBytes = 0
-    #     for bundle, req in pod.requirements.items():
-    #         meta =  self.catalog.get(bundle)
-    #         if not meta:
-    #             continue
-    #         needIDs = meta.allPrefabIDs if req is None else req
-    #         haveIDs = cacheSnapshot.get(bundle, set())
-
-    #         for pid in needIDs:
-    #             if pid in haveIDs:
-    #                 rawBytes += meta.prefabSizes.get(pid, 0)
-
-    #     factor = math.sqrt(podsCount + 1)
-    #     return int(rawBytes /factor)
-    
-    # def bindPodToNode_old(self, nodeID: str, podID: str, pod: PodSpec):
-        # with self.podsLock:
-        #     self.pods[podID] = pod
-        
-        # node = self.nodes[nodeID]
-        # with node.lock:
-        #     if podID in node.pods:
-        #         return
-        #     node.pods.add(podID)
-
-        #     for bundle, req in pod.requirements.items():
-        #         meta = self.catalog.get(bundle)
-        #         if not meta:
-        #             continue
-        #         needIDs = meta.allPrefabIDs if req is None else req
-        #         bucket = node.cache.setdefault(bundle, set())
-        #         # 加入缓存（set 去重，不会重复计）
-        #         bucket.update(pid for pid in needIDs if pid in meta.prefabSizes)
-
-    def _bundle_sizes_for_ids(self, bundle: str, ids: Set[str]) -> int:
-        meta = self.catalog.get(bundle)
+    def _prefab_sizes_for_ids(self, prefab: str, ids: Set[str]) -> int:
+        meta = self.catalog.get(prefab)
         if not meta:
             return 0
         return sum(meta.prefabSizes.get(pid, 0) for pid in ids)
@@ -275,44 +233,44 @@ class SimulatorState:
         have: Dict[str, Set[str]] = {}  
         pulling: Dict[str, Set[str]] = {}  
         missing: Dict[str, Set[str]] = {}  
-        for bundle, req in pod.requirements.items():  
-            meta = self.catalog.get(bundle)  
+        for prefab, req in pod.requirements.items():  
+            meta = self.catalog.get(prefab)  
             if not meta:  
-                have[bundle] = set()  
-                pulling[bundle] = set()  
-                missing[bundle] = set()  
+                have[prefab] = set()  
+                pulling[prefab] = set()  
+                missing[prefab] = set()  
                 continue  
 
             needIDs = meta.allPrefabIDs if req is None else req  
-            haveIDs = node.cache.get(bundle, set())  
-            pullingIDs = node.pullingCache.get(bundle, set())  
+            haveIDs = node.cache.get(prefab, set())  
+            pullingIDs = node.pullingCache.get(prefab, set())  
 
-            have[bundle] = needIDs & haveIDs  
-            pulling[bundle] = needIDs & pullingIDs  
-            missing[bundle] = needIDs - haveIDs - pullingIDs  
+            have[prefab] = needIDs & haveIDs  
+            pulling[prefab] = needIDs & pullingIDs  
+            missing[prefab] = needIDs - haveIDs - pullingIDs  
         return have, pulling, missing  
     
-    def _cleanup_completed_pulls(self, node: NodeState):
+    def _cleanup_completed_pulls(self, node: NodeState, nowTime: str):
         """  
         把已到 endTime 的 PullTask 从 pullingCache 移到 cache，  
         同时更新 bytesPulling/bytesCache，清理 pullTasks。  
         """  
-        now = time.monotonic()  
+        now = nowTime
         completed: List[PullTask] = []  
 
         for task in list(node.pullTasks):
             if now >= task.endTime:
                  # 策略2：拉取完成后才对评分可见 => 放入 cache
                 if self.pullStrategy == 2:
-                    bucket = node.cache.setdefault(task.bundle, set())
+                    bucket = node.cache.setdefault(task.prefab, set())
                     bucket.update(task.prefabIDs)
 
                # 从拉取集中移除（两种策略都可以维护 pullingCache）
-                pullingBucket = node.pullingCache.get(task.bundle)
+                pullingBucket = node.pullingCache.get(task.prefab)
                 if pullingBucket:
                     pullingBucket.difference_update(task.prefabID)
                     if not pullingBucket:
-                        node.pullingCache.pop(task.bundle, None)
+                        node.pullingCache.pop(task.prefab, None)
 
                 # 更新大小
                 sizeDone = task.totalBytes
@@ -320,7 +278,7 @@ class SimulatorState:
                 node.bytesCache += sizeDone
 
                 completed.append(task)
-                # print(f"[Pull] {task.nodeID} completed {len(task.prefabIDs)} prefabs from {task.bundle}, +{sizeDone/mb:.1f}MB")
+                # print(f"[Pull] {task.nodeID} completed {len(task.prefabIDs)} prefabs from {task.prefab}, +{sizeDone/MB:.1f}MB")
         for task in completed:
             node.pullTasks.remove(task)
 
@@ -328,12 +286,12 @@ class SimulatorState:
         if not node.pullTasks and node.pullBusyUntil < now:
             node.pullBusyUntil = now
 
-    def _cleanup_finished_exec_for_node(self, nodeID: str):
+    def _cleanup_finished_exec_for_node(self, nodeID: str, nowTime: str):
         """
         清理 node 上已完成的执行任务（基于当前时间），
         并用堆中“最大结束时间”刷新 nodeExecBusyUntil。
         """
-        now = time.monotonic()
+        now = nowTime
         heap = self.nodeExecHeaps.setdefault(nodeID, [])
         # 移除所有已经结束的任务
         while heap and heap[0] <= now:
@@ -341,29 +299,28 @@ class SimulatorState:
         # 将“节点忙碌到”的时间更新为堆中最大结束时间（无任务则回落到 now）
         self.nodeExecBusyUntil[nodeID] = (max(heap) if heap else now)
 
-    def record_job_schedule(self, nodeID: str, podID: str, job_start_abs: float, job_end_abs: float, pod: PodSpec):
+    def recordJobSchedule(self, nodeID: str, podID: str, nowTime: float, job_start_abs: float, job_end_abs: float, pod: PodSpec):
         """
         - compute_ready_at: 节点可执行该 job 的最早时间（受并发限制与正在运行任务影响）
         - data_ready_at: 该 job 依赖数据拉取完成的时间（受拉取队列影响）
         - eta: max(compute_ready_at - now, data_ready_at - now)
         - ready_at: max(compute_ready_at, data_ready_at)
-        - 在 job_end_abs 将该任务的结束时间压入执行堆，以限制并发，并通过惰性清理回收
         """
-        now = time.monotonic()
+        now = nowTime
         node = self.nodes[nodeID]
         with node.lock:
-            self._cleanup_completed_pulls(node)
+            self._cleanup_completed_pulls(node, now)
             _, _, missing = self._needs_sets_for_pod_on_node(node, pod)
             newBytes = 0
-            for bundle, ids in missing.items():
-                newBytes += self._bundle_sizes_for_ids(bundle, ids)
+            for prefab, ids in missing.items():
+                newBytes += self._prefab_sizes_for_ids(prefab, ids)
 
             pull_wait = max(0.0, node.pullBusyUntil - now)
-            new_pull_time = (newBytes / self.networkBW) if newBytes > 0 else 0.0
+            new_pull_time = speedPulling(newBytes, self.networkBW) if newBytes > 0 else 0.0
             data_ready_at = now + pull_wait + new_pull_time
        
         # 并发限制：清理已完成执行任务，计算计算就绪时间
-        self._cleanup_finished_exec_for_node(nodeID)
+        self._cleanup_finished_exec_for_node(nodeID, nowTime)
         execHeap = self.nodeExecHeaps[nodeID]
         if len(execHeap) < self.nodePodLimit:
             compute_ready_at = now
@@ -371,38 +328,46 @@ class SimulatorState:
             compute_ready_at = execHeap[0]  # 最早空闲 slot 的时间
 
         ready_at = max(compute_ready_at, data_ready_at)
-        eta = ready_at - now
 
          # 将当前 job 的结束时间放入该节点的执行堆（占用一个并发 slot）
         if job_end_abs is not None:
-            heapq.heappush(execHeap, job_end_abs)
+            job_duration = job_end_abs - job_start_abs
+            heapq.heappush(execHeap, ready_at + job_duration)
             # 刷新“节点忙碌到”时间为当前所有任务最大结束时间
             self.nodeExecBusyUntil[nodeID] = max(execHeap) if execHeap else now
 
         # 记录本次任务的关键时间
         self.jobRecords[podID] = {
             "node": nodeID,
-            "job_start_at": job_start_abs,
-            "job_end_at": job_end_abs,
+            "job_duration": job_duration,
             "compute_ready_at": compute_ready_at,
             "data_ready_at": data_ready_at,
-            "eta": eta,
             "ready_at": ready_at,
             "concurrency_limit": self.nodePodLimit,
             "running_slots_after_schedule": len(execHeap),
         }
 
-    def scoreNodeForPod(self, nodeID: str, pod: PodSpec) -> int:
+    def calculatePriority(self, sumScores: int, numPods: int):
+        maxThreshold = MAX_CONTAINER_THRESHOLD * numPods
+        # print(sumScores, MIN_THRESHOLD, maxThreshold)
+        if sumScores < MIN_THRESHOLD:
+            sumScores = MIN_THRESHOLD
+        elif sumScores > maxThreshold:
+            sumScores = maxThreshold
+        # print(MAX_NODE_SCORE * (sumScores - MIN_THRESHOLD) / (maxThreshold - MIN_THRESHOLD))
+        return MAX_NODE_SCORE * (sumScores - MIN_THRESHOLD) / (maxThreshold - MIN_THRESHOLD)
+
+    def scoreNodeForPod(self, nodeID: str, pod: PodSpec,nowTime: float) -> int:
         if self.pullStrategy == 1:
-            return self.scoreNodeForPod_Strategy1(nodeID, pod)
+            return self.scoreNodeForPod_Strategy1(nodeID, pod, nowTime)
         else:
-            return self.scoreNodeForPod_Strategy2(nodeID, pod)
+            return self.scoreNodeForPod_Strategy2(nodeID, pod, nowTime)
         
-    def bindPodToNode(self, nodeID: str, podID: str, pod: PodSpec):
+    def bindPodToNode(self, nodeID: str, podID: str, pod: PodSpec, nowTime: float):
         if self.pullStrategy == 1:
-            self.bindPodToNode_Strategy1(nodeID, podID, pod)
+            self.bindPodToNode_Strategy1(nodeID, podID, pod, nowTime)
         else:
-            self.bindPodToNode_Strategy2(nodeID, podID, pod)
+            self.bindPodToNode_Strategy2(nodeID, podID, pod, nowTime)
 
     def unbindPodFromNode(self, nodeID: str, podID: str, clearCache: bool = False):
         node = self.nodes[nodeID]
@@ -427,11 +392,11 @@ class SimulatorState:
             self.pods.pop(podID, None)
 
     """策略1 拉取前就记录到缓存 评分时可见"""
-    def scoreNodeForPod_Strategy1(self, nodeID: str, pod: PodSpec) -> int:
+    def scoreNodeForPod_Strategy1(self, nodeID: str, pod: PodSpec, nowTime: float) -> int:
         node = self.nodes[nodeID]
-
+        
         with node.lock:
-            self._cleanup_completed_pulls(node)
+            self._cleanup_completed_pulls(node, nowTime)
             podsCount = len(node.pods)
             cacheSnapshot = {b: ids.copy() for b, ids in node.cache.items()}
             
@@ -442,58 +407,59 @@ class SimulatorState:
                     continue
                 needIDs = meta.allPrefabIDs if req is None else req
                 haveIDs = cacheSnapshot.get(bundle, set())
-                
+                # prefab去重
+                processedIDs = []
                 for pid in needIDs:
-                    if pid in haveIDs:
+                    if pid in haveIDs and pid not in processedIDs:
                         hitBytes += meta.prefabSizes.get(pid, 0)
+                        processedIDs.append(pid)
 
             factor = math.sqrt(podsCount + 1)
-            return int(hitBytes /factor)          
+            return self.calculatePriority(int(hitBytes /factor), podsCount)          
 
-    def bindPodToNode_Strategy1(self, nodeID: str, podID: str, pod: PodSpec):
+    def bindPodToNode_Strategy1(self, nodeID: str, podID: str, pod: PodSpec, nowTime: float):
         with self.podsLock:
             self.pods[podID] = pod
         
         node = self.nodes[nodeID]
-        now = time.monotonic()
+        now = nowTime
         with node.lock:
-            self._cleanup_completed_pulls(node)
+            self._cleanup_completed_pulls(node, now)
             if podID in node.pods:
                 return
             node.pods.add(podID)
 
             _, _, missing = self._needs_sets_for_pod_on_node(node, pod)
             newBytes = 0
-            for bundle, ids in missing.items():
-                newBytes += self._bundle_sizes_for_ids(bundle, ids)
+            for prefab, ids in missing.items():
+                newBytes += self._prefab_sizes_for_ids(prefab, ids)
 
-            # 容量校验
             if node.bytesCache + node.bytesPulling + newBytes > node.diskCapacityBytes:
                 node.pods.remove(podID)
                 with self.podsLock:
                     self.pods.pop(podID, None)
                 raise RuntimeError(f"[ERROR] Node {nodeID} out of disk space for pod {podID}")
             # 策略1：评分可见 —— 将 missing 直接加入 cache（仅评分可见，不代表已完成）
-            for bundle, ids in missing.items():
+            for prefab, ids in missing.items():
                 if not ids:
                     continue
-                node.cache.setdefault(bundle, set()).update(ids)
+                node.cache.setdefault(prefab, set()).update(ids)
              # 构建拉取任务（串行排队），并预留 bytesPulling
-            for bundle, ids in missing.items():
+            for prefab, ids in missing.items():
                 if not ids:
                     continue
-                sizeBytes = self._bundle_sizes_for_ids(bundle, ids)
+                sizeBytes = self._prefab_sizes_for_ids(prefab, ids)
                 if sizeBytes <= 0:
                     continue
 
                 # 可以选择是否把 ids 标到 pullingCache 做可视追踪
-                node.pullingCache.setdefault(bundle, set()).update(ids)
+                node.pullingCache.setdefault(prefab, set()).update(ids)
 
                 start = max(now, node.pullBusyUntil)
-                end = start + sizeBytes / self.networkBW
+                end = start + speedPulling(sizeBytes, self.networkBW)
                 task = PullTask(
                     nodeID=nodeID,
-                    bundle=bundle,
+                    prefab=prefab,
                     prefabID=set(ids),
                     totalBytes=sizeBytes,
                     startTime=start,
@@ -505,13 +471,12 @@ class SimulatorState:
                 node.bytesPulling += sizeBytes
                 # print(f"[Pull] {nodeID} started pulling {len(ids)} prefabs from {bundle}, f"size={sizeBytes/1024/1024:.1f}MB, est_time={end-start:.2f}s, , queue-until={node.pullBusyUntil:.2f}")
                 
-
     """策略2 拉取完成后再记录到缓存 评分时不可见"""
-    def scoreNodeForPod_Strategy2(self, nodeID: str, pod: PodSpec) -> int:
+    def scoreNodeForPod_Strategy2(self, nodeID: str, pod: PodSpec, nowTime: float) -> int:
         node = self.nodes[nodeID]
 
         with node.lock:
-            self._cleanup_completed_pulls(node)
+            self._cleanup_completed_pulls(node, nowTime)
             podsCount = len(node.pods)
             cacheSnapshot = {b: ids.copy() for b, ids in node.cache.items()}
 
@@ -522,30 +487,33 @@ class SimulatorState:
                 continue
             needIDs = meta.allPrefabIDs if req is None else req
             haveIDs = cacheSnapshot.get(bundle, set())
-            
+            # prefab去重
+            processedIDs = []
             for pid in needIDs:
-                if pid in haveIDs:
+                if pid in haveIDs and pid not in processedIDs:
                     hitBytes += meta.prefabSizes.get(pid, 0)
+                    processedIDs.append(pid)
+
         factor = math.sqrt(podsCount + 1)
-        return int(hitBytes /factor)
+        return self.calculatePriority(int(hitBytes /factor), podsCount)
     
-    def bindPodToNode_Strategy2(self, nodeID: str, podID: str, pod: PodSpec):
+    def bindPodToNode_Strategy2(self, nodeID: str, podID: str, pod: PodSpec, nowTime: float):
         with self.podsLock:
             self.pods[podID] = pod
         
         node = self.nodes[nodeID]
-        now = time.monotonic()
+        now = nowTime
         with node.lock:
-            self._cleanup_completed_pulls(node)
+            self._cleanup_completed_pulls(node, now)
             if podID in node.pods:
                 return
             node.pods.add(podID)
 
-            _, _, missing = self._needed_sets_for_pod_on_node(node, pod)
+            _, _, missing = self._needs_sets_for_pod_on_node(node, pod)
             # 计算需要新增的字节（不含 pulling 中的）
             newBytes = 0
             for bundle, ids in missing.items():
-                newBytes += self._bundle_sizes_for_ids(bundle, ids)
+                newBytes += self._prefab_sizes_for_ids(bundle, ids)
 
             # 容量校验
             if node.bytesCache + node.bytesPulling + newBytes > node.diskCapacityBytes:
@@ -553,23 +521,23 @@ class SimulatorState:
                 with self.podsLock:
                     self.pods.pop(podID, None)
                 raise RuntimeError(f"Node {nodeID} lacks capacity for {podID}: "
-                                f"need {newBytes/gb:.2f}GB, used {(node.bytesCache+node.bytesPulling)/gb:.2f}GB / {node.diskCapacityBytes/gb:.2f}GB")
+                                f"need {newBytes/GB:.2f}GB, used {(node.bytesCache+node.bytesPulling)/GB:.2f}GB / {node.diskCapacityBytes/GB:.2f}GB")
 
             # 策略2：拉取中对评分不可见 —— 写入 pullingCache，不写 cache
-            for bundle, ids in missing.items():
+            for prefab, ids in missing.items():
                 if not ids:
                     continue
-                node.pullingCache.setdefault(bundle, set()).update(ids)
+                node.pullingCache.setdefault(prefab, set()).update(ids)
 
-                sizeBytes = self._bundle_sizes_for_ids(bundle, ids)
+                sizeBytes = self._prefab_sizes_for_ids(prefab, ids)
                 if sizeBytes <= 0:
                     continue
 
                 start = max(now, node.pullBusyUntil)
-                end = start + (sizeBytes / self.networkBW)
+                end = start + speedPulling(sizeBytes, self.networkBW)
                 task = PullTask(
                     nodeID=nodeID,
-                    bundle=bundle,
+                    prefab=prefab,
                     prefabIDs=set(ids),
                     totalBytes=sizeBytes,
                     startTime=start,
@@ -580,7 +548,19 @@ class SimulatorState:
                 node.pullBusyUntil = end
                 node.bytesPulling += sizeBytes
 
- 
+@dataclass
+class TimeOpt:
+    initialTime: float = 0
+    globalTime: float = 0
+    
+    def getInitialTime(self):
+        return self.initialTime
+    
+    def getGlobalTime(self):
+        return self.globalTime
+    
+    def setGlobalTime(self, newTime):
+        self.globalTime = newTime
 
 def loadAppJSON(path: str) -> Dict:
     with open(path, "r") as f:
@@ -594,10 +574,10 @@ def load_simulation_events(path: str) -> List[Dict[str, Any]]:
     events.sort(key=lambda x: x["start_time"])
     return events
 
-def pick_best_node(
+def pickBestNode(
     state: SimulatorState,
     pod: PodSpec,
-    job_end_abs: Optional[float] = None,  # 新增：本 job 的绝对结束时间（用于约束/优先选择）
+    nowTime: float, 
 ) -> Optional[str]:
     """
     根据容量与 ETA 选择节点：
@@ -613,28 +593,27 @@ def pick_best_node(
     bestETA = float("inf")
     bestScore = -1
     bestLoad = float("inf")
-    bestFeasible = False  # 是否满足 job_end 约束
 
-    now = time.monotonic()
+    now = nowTime
     for nid, node in state.nodes.items():
         with node.lock:
-            state._cleanup_completed_pulls(node)
+            state._cleanup_completed_pulls(node, now)
 
             _, _, missing = state._needs_sets_for_pod_on_node(node, pod)
             newBytes = 0
-            for bundle, ids in missing.items():
-                newBytes += state._bundle_sizes_for_ids(bundle, ids)
+            for prefab, ids in missing.items():
+                newBytes += state._prefab_sizes_for_ids(prefab, ids)
 
             # 容量约束
             if node.bytesCache + node.bytesPulling + newBytes > node.diskCapacityBytes:
                 continue
 
             pull_wait = max(0.0, node.pullBusyUntil - now)
-            new_pull_time = (newBytes / state.networkBW) if newBytes > 0 else 0.0
+            new_pull_time = speedPulling(newBytes, state.networkBW) if newBytes > 0 else 0.0
             dataWait = pull_wait + new_pull_time
 
         # 计算并发限制导致的计算等待
-        state._cleanup_finished_exec_for_node(nid)
+        state._cleanup_finished_exec_for_node(nid, now)
         execHeap = state.nodeExecHeaps[nid]
         if len(execHeap) < state.nodePodLimit:
             computeWait = 0.0
@@ -642,21 +621,14 @@ def pick_best_node(
             computeWait = max(0.0, execHeap[0] - now)  # 等到最早空闲的 slot
 
         eta = max(computeWait, dataWait)
-        score = state.scoreNodeForPod(nid, pod)
+        score = state.scoreNodeForPod(nid, pod, now)
         load = len(node.pods)
 
-        feasible = (job_end_abs is None) or (now + eta <= job_end_abs)
-        if (feasible and not bestFeasible) or \
-           (feasible == bestFeasible and (
-               (eta < bestETA) or
-               (eta == bestETA and score > bestScore) or
-               (eta == bestETA and score == bestScore and load < bestLoad)
-           )):
+        if (eta < bestETA) or (eta == bestETA and score > bestScore) or (eta == bestETA and score == bestScore and load < bestLoad):
             bestNid = nid
             bestETA = eta
             bestScore = score
             bestLoad = load
-            bestFeasible = feasible
 
     return bestNid
 
@@ -666,91 +638,79 @@ def printCatalog():
 def printState():
     pass
 
+def speedPulling(size: int, bandwidth: int):
+    return (size /MB /bandwidth)
+
 if __name__ == "__main__":
     simulateFlag = 1
     appJSON = loadAppJSON("apps.json")
     # appJSON = loadAppJSON(BUNDLE_CACHE_FILE) 
     catalog = buildBundleCatalog(appJSON)
-    
+    timeOpt = TimeOpt()
 
     nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
-    state = SimulatorState(catalog, nodeIDs, networkBW=BANDWIDTH*mb)
+    state = SimulatorState(catalog, nodeIDs, networkBW=BANDWIDTH*MB)
     state.pullStrategy = PULL_STRATEGY
 
-    events =load_simulation_events("test20.json")
+    events =load_simulation_events("2017-10-06-Simulation.json")
     # events =load_simulation_events(JOB_SEQ_FILE)
-    t0 = time.monotonic()
     scheduledCount = 0
-    print("job, node, start_time, end_time, eta, running_pods")
+    print("No., job, node, running_pods, score, compute_ready_at, data_ready_at, start_time, end_time")
 
     for idx, ev in enumerate(events):
         jobid = int(ev["jobid"])
         start_time = float(ev["start_time"])  # seconds
         end_time  = float(ev["end_time"])
 
-
         bundle = JOBID_TO_BUNDLE.get(jobid)
         if bundle is None:
             print(f"[WARN] Unknown jobid={jobid} at t={start_time}s. Please add mapping. Skip.")
             continue
 
-        now = time.monotonic()
-        job_start_abs = t0 + start_time
-        job_end_abs = t0 + end_time if end_time > start_time else None
-        if now < job_start_abs:
-            time.sleep(job_start_abs - now)
+        job_start_abs = timeOpt.getInitialTime() + start_time
+        job_end_abs = timeOpt.getInitialTime() + end_time if end_time > start_time else None
+        if timeOpt.getGlobalTime() < job_start_abs:
+            timeOpt.setGlobalTime(job_start_abs)
 
         podID = f"job-{jobid}-{idx+1}"
         pod = PodSpec(requirements={bundle: None})
 
-        bestNode = pick_best_node(state, pod, job_end_abs=job_end_abs)
+        bestNode = pickBestNode(state, pod, timeOpt.getGlobalTime())
         if bestNode is None:
             print(f"[ERROR] No available node for pod {podID} at t={start_time}s")
             continue
         
-        state.record_job_schedule(bestNode, podID, job_start_abs, job_end_abs, pod)
-        state.bindPodToNode(bestNode, podID, pod)
+        state.recordJobSchedule(bestNode, podID, timeOpt.getGlobalTime(), job_start_abs, job_end_abs, pod)
+        state.bindPodToNode(bestNode, podID, pod, timeOpt.getGlobalTime())
 
-        if simulateFlag:
-            ready_at = state.jobRecords[podID]["ready_at"]
-            now2 = time.monotonic()
-            delayToLaunch = max(0.1, ready_at - now2)
-            lifetime = max(1.0, end_time - start_time)
+        # 只考虑调度，不考虑实际运行时间
+        createPodAndAutoDelete(
+            podID,
+            bestNode,
+            image=JOBID_TO_BUNDLE[jobid],
+            cpu="2",
+            mem="512Mi",
+            ephemeralStorage="1000Mi",
+            lifetimeSeconds=1.0,
+            labels={"job": JOBID_TO_BUNDLE[jobid]},
+            annotations={"simulator/start_time": str(start_time)},
+        )
 
-            threading.Timer(delayToLaunch, 
-                            createPodAndAutoDelete, 
-                            args=(podID, bestNode),
-                            kwargs={
-                                "image": JOBID_TO_BUNDLE[jobid],
-                                "cpu": "2",
-                                "mem": "512Mi",
-                                "ephemeralStorage": "1000Mi",
-                                "lifetimeSeconds": lifetime,
-                                "labels": {"job": JOBID_TO_BUNDLE[jobid]},
-                                "annotations": {"simulator/start_time": str(start_time)},
-                            }).start()
-
-        else:
-            # 只考虑调度，不考虑实际运行时间
-            createPodAndAutoDelete(
-                podID,
-                bestNode,
-                image=JOBID_TO_BUNDLE[jobid],
-                cpu="2",
-                mem="512Mi",
-                ephemeralStorage="1000Mi",
-                # lifetimeSeconds=end_time - start_time,
-                lifetimeSeconds=1.0,
-                labels={"job": JOBID_TO_BUNDLE[jobid]},
-                annotations={"simulator/start_time": str(start_time)},
-            )
-
-        newScore = state.scoreNodeForPod(bestNode, pod)
+        newScore = state.scoreNodeForPod(bestNode, pod,timeOpt.getGlobalTime())
         scheduledCount += 1
 
-        # 只获取ETA
-        print(f"{JOBID_TO_BUNDLE[jobid]}, {bestNode}, {end_time-start_time}, {(state.jobRecords[podID]['ready_at']-t0):.2f}, {len(state.nodes[bestNode].pods)}")
-
+        # No., job, node, running_pods, score, compute_ready_at, data_ready_at, start_time, end_time,
+        print(
+            f"{scheduledCount}, "
+            f"{JOBID_TO_BUNDLE[jobid]}, "
+            f"{bestNode}, "
+            f"{state.jobRecords[podID]['running_slots_after_schedule']}, "
+            f"{newScore:.2f}, "
+            f"{state.jobRecords[podID]['compute_ready_at']:.2f}, "
+            f"{state.jobRecords[podID]['data_ready_at']:.2f}, "
+            f"{state.jobRecords[podID]['ready_at']:.2f}, "
+            f"{(state.jobRecords[podID]['ready_at'] + state.jobRecords[podID]['job_duration']):.2f}"
+)
 
     
     print(f"Completed!")

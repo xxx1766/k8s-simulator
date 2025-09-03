@@ -85,4 +85,4 @@ def main(total=1000, workers=32):
     print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
 
 if __name__ == "__main__":
-    main(total=10, workers=32)
+    main(total=1000, workers=32)

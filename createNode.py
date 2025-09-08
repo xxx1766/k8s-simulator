@@ -7,6 +7,7 @@ KUBECTL_BASE = [
     "--server", KUBE_SERVER,
     "--insecure-skip-tls-verify=true",
 ]
+WORKDIR = "/root/simulating"
 
 def run(cmd, stdin_str=None):
     p = subprocess.Popen(
@@ -21,17 +22,19 @@ def run(cmd, stdin_str=None):
         raise RuntimeError(f"cmd failed: {' '.join(cmd)}\nstdout:\n{out}\nstderr:\n{err}")
     return out
 
-def create_node(idx: int, cpu="4", mem="8Gi", pods="110", storage="50Gi"):
+def create_node(idx: int, cpu="4", mem="8Gi", pods="8", storage="50Gi"):
     name = f"worker-{idx}"
+    node_ip = f"10.0.{idx//250}.{idx%250+1}"
+
     # 1) 创建 Node（metadata + labels）
     yaml_doc = f"""apiVersion: v1
-kind: Node
-metadata:
-  name: {name}
-  labels:
-    kubernetes.io/role: worker
-    node-type: standard
-"""
+                kind: Node
+                metadata:
+                name: {name}
+                labels:
+                    kubernetes.io/role: worker
+                    node-type: standard
+                """
     run(KUBECTL_BASE + ["apply", "-f", "-"], yaml_doc)
 
     # 2) 补丁 status（Ready + capacity/allocatable + addresses）
@@ -56,7 +59,7 @@ metadata:
                 "ephemeral-storage": str(storage),
             },
             "addresses": [
-                {"type": "InternalIP", "address": f"10.0.{idx//250}.{idx%250+1}"},
+                {"type": "InternalIP", "address": node_ip},
                 {"type": "Hostname",   "address": name},
             ],
         }
@@ -67,6 +70,15 @@ metadata:
         "--subresource=status",
         "-p", json.dumps(payload)
     ])
+    # create a directory to simulate node's filesystem
+    #   workdir/InternalIP/PrefabService/File.json
+    #   workdir/InternalIP/images.json
+    run(["mkdir", "-p", f"{WORKDIR}/{node_ip}"])
+    # create an empty images.json file
+    run(["mkdir", "-p", f"{WORKDIR}/{node_ip}/PrefabService"])
+    run(["bash", "-c", f"echo '{{}}' > {WORKDIR}/{node_ip}/images.json"])
+    run(["bash", "-c", f"echo '{{}}' > {WORKDIR}/{node_ip}/PrefabService/File.json"])
+    
     return name
 
 def main(total=1000, workers=32):

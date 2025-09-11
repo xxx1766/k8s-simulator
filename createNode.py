@@ -22,19 +22,19 @@ def run(cmd, stdin_str=None):
         raise RuntimeError(f"cmd failed: {' '.join(cmd)}\nstdout:\n{out}\nstderr:\n{err}")
     return out
 
-def create_node(idx: int, cpu="4", mem="8Gi", pods="8", storage="50Gi"):
+def create_node(idx: int, cpu="16", mem="32Gi", pods="8", storage="50Gi"):
     name = f"worker-{idx}"
     node_ip = f"10.0.{idx//250}.{idx%250+1}"
 
     # 1) 创建 Node（metadata + labels）
     yaml_doc = f"""apiVersion: v1
-                kind: Node
-                metadata:
-                name: {name}
-                labels:
-                    kubernetes.io/role: worker
-                    node-type: standard
-                """
+kind: Node
+metadata:
+  name: {name}
+  labels:
+    kubernetes.io/role: worker
+    node-type: standard
+"""
     run(KUBECTL_BASE + ["apply", "-f", "-"], yaml_doc)
 
     # 2) 补丁 status（Ready + capacity/allocatable + addresses）

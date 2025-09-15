@@ -3,5 +3,5 @@
   { "jobid": 2, "start_time": 6,  "end_time": 26 },
   { "jobid": 5, "start_time": 11, "end_time": 51 },
   { "jobid": 7, "start_time": 13, "end_time": 21 },
-  { "jobid": 2, "start_time": 17, "end_time": 70 }
+  { "jobid": 2, "start_time": 17, "end_time": 60 }
 ]

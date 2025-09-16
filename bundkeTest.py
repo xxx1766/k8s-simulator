@@ -7,6 +7,7 @@ import threading
 import subprocess
 import argparse
 import time
+import os
 
 KUBE_SERVER = "http://localhost:3131"
 NAMESPACE = "default"
@@ -18,18 +19,18 @@ KUBECTL_BASE = [
 ]
 
 # crio
-IMAGE_NAMES = [
+BUNDLE_NAMES = [
     "clip",
-    "lora-gpu",
+    "lora",
     "sam2",
-    "sb3-gpu",
+    "sb3",
     "stablediffusion",
-    "transformers-gpu",
+    "transformers",
     "tts",
     "whisper",
-    "yolo11-gpu"
+    "yolo11"
 ]
-JOBID_TO_IMAGE: Dict[int, str] = {i: name for i, name in enumerate(IMAGE_NAMES)}
+JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
 BANDWIDTH = 100
@@ -44,22 +45,39 @@ MAX_NODE_SCORE  = 100
 FACTOR = 2.0
 
 @dataclass
-class ImageMeta:
-    layerSizes: Dict[str, int]
-    alllayers: Set[str]
+class BundleMeta:
+    prefabSizes: Dict[str, int] 
+    allPrefabIDs: Set[str]
     totalSize: int
+    id: str
+    tag: str 
+    realSize: float
 
-def buildLayerCatalog(payloadJSON: dict) -> Dict[str, ImageMeta]:
-    catalog: Dict[str, ImageMeta] = {}
-    for imageName, entry in payloadJSON.items():
-        layerSizes: Dict[str, int] = {}
+def buildPrefabCatalog(appJSON: Dict, bundleJSON: Dict) -> Dict[str, BundleMeta]:
+    # app.json ==>
+    # { bundle_name -> {"taskc": [...], "prefabs": { prefabID: size, ... } }, ... }
+    catalog: Dict[str, BundleMeta] = {}
+    for bundle_name, entry in appJSON.items():
+        prefabSizes: Dict[str, int] = {}
         allIDs: Set[str] = set()
 
-        for p in entry.get("LayersData", []):
-            layerSizes[p["Digest"]] = int(p["Size"])
-            allIDs.add(p["Digest"])
-        totalSize = sum(layerSizes.values())
-        catalog[imageName] = ImageMeta(layerSizes, allIDs, totalSize)
+        taskc = entry.get("taskc")
+        if taskc:
+            prefabSizes[taskc["prefabID"]] = int(taskc["prefabSize"])
+            allIDs.add(taskc["prefabID"])
+
+        for p in entry.get("prefabs", []):
+            prefabSizes[p["prefabID"]] = int(p["prefabSize"])
+            allIDs.add(p["prefabID"])
+        
+        totalSize = sum(prefabSizes.values())
+        catalog[bundle_name] = BundleMeta(prefabSizes=prefabSizes, 
+                                          allPrefabIDs=allIDs, 
+                                          totalSize=totalSize,
+                                          id=bundleJSON.get(bundle_name, {}).get("Id", ""),
+                                          tag=bundleJSON.get(bundle_name, {}).get("Tag", ""),
+                                          realSize=float(bundleJSON.get(bundle_name, {}).get("Size", 0.0)))
+
     return catalog
 
 @dataclass
@@ -71,34 +89,34 @@ class PodSpec:
     requirements: Dict[str, Optional[Set[str]]] 
 
 class SimulatorState:
-    def __init__(self, catalog: Dict[str, ImageMeta], nodeIDs: Iterable[str], networkBW: float = 100*MB):
+    def __init__(self, catalog: Dict[str, BundleMeta], nodeIDs: Iterable[str], networkBW: float = 100*MB):
         self.nodes: Dict[str, NodeState] = {nid: NodeState() for nid in nodeIDs}
         self.catalog = catalog
         # self.pods: Dict[str, PodSpec] = {}
         self.networkBW = networkBW
 
-    def _layer_sizes_for_ids(self, layer: str, ids: Set[str]) -> int:
-        meta = self.catalog.get(layer)
+    def _prefab_sizes_for_ids(self, prefab: str, ids: Set[str]) -> int:
+        meta = self.catalog.get(prefab)
         if not meta:
             return 0
-        return sum(meta.layerSizes.get(lid, 0) for lid in ids)
+        return sum(meta.prefabSizes.get(pid, 0) for pid in ids)
     
     def _needs_for_pod_on_node(self, node: NodeState, pod: PodSpec) -> Dict[str, Set[str]]:
         haved: Dict[str, Set[str]] = {}
         needs: Dict[str, Set[str]] = {}
-        for layer, req in pod.requirements.items():
-            meta = self.catalog.get(layer)
+        for prefab, req in pod.requirements.items():
+            meta = self.catalog.get(prefab)
             if not meta:
-                haved[layer] = set()
-                needs[layer] = set()
+                haved[prefab] = set()
+                needs[prefab] = set()
                 continue
-            havedIDs = node.cache.get(layer, set())
-            needIDs = meta.alllayers if req is None else req
+            havedIDs = node.cache.get(prefab, set())
+            needIDs = meta.allPrefabIDs if req is None else req
 
-            haved[layer] = havedIDs & needIDs
-            needs[layer] = needIDs - havedIDs
+            haved[prefab] = havedIDs & needIDs
+            needs[prefab] = needIDs - havedIDs
         return needs
-
+    
 def calculatePullTime(state: SimulatorState, pod: PodSpec, nodeID: str) -> float:
     nodeName = f"worker-{nodeID}"
     node = state.nodes.get(nodeName)
@@ -108,8 +126,8 @@ def calculatePullTime(state: SimulatorState, pod: PodSpec, nodeID: str) -> float
     
     needs = state._needs_for_pod_on_node(node, pod)
     newBytes = 0
-    for layer, ids in needs.items():
-        newBytes += state._layer_sizes_for_ids(layer, ids)
+    for prefab, ids in needs.items():
+        newBytes += state._prefab_sizes_for_ids(prefab, ids)
     pullTime = speedPulling(newBytes, state.networkBW) if newBytes > 0 else 0.0
 
     return pullTime
@@ -167,7 +185,7 @@ def createPodConfig(
             "annotations": annotations,
         },
         "spec": {
-            "schedulerName": "layer-scheduler",
+            "schedulerName": "bundle-scheduler",
             "restartPolicy": "Never",
             "activeDeadlineSeconds": max(int(lifetimeSeconds),1),  # Invalid value: 0: must be between 1 and 2147483647, inclusive
             "containers": [
@@ -217,9 +235,9 @@ def createPodAndAutoDelete(
         print(f"[ERROR] Pod {podName} scheduling timeout")
         return
     pullingTime = calculatePullTime(state, pod, nodeID)
-    t1 = threading.Timer(pullingTime, imageInfoToStore, args=(nodeID, image, state, pod))
+    t1 = threading.Timer(pullingTime, bundleInfoToStore, args=(nodeID, image, state, pod))
     t1.start()
-    # print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
+    print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
     t2 = threading.Timer(pullingTime+lifetimeSeconds, deletePod, args=(podName,))
     t2.start()
     return nodeID, pullingTime, getSpecificNodePodCount(nodeID)
@@ -256,7 +274,6 @@ def getNodePodCount(nodeName: str = None) -> dict:
         print(f"[ERROR] Failed to get pod counts: {e}")
         return {}
 
-# 获取特定节点pod数量
 def getSpecificNodePodCount(nodeID: str) -> int:
     nodeName = f"worker-{nodeID}"
     counts = getNodePodCount(nodeName)
@@ -275,54 +292,75 @@ def load_simulation_events(path: str) -> List[Dict[str, Any]]:
     events.sort(key=lambda x: x["start_time"])
     return events
 
-def imageInfoToStore(nodeID: str, image: str, state: SimulatorState, pod: PodSpec) -> Optional[str]:
+def bundleInfoToStore(nodeID: str, bundle: str, state: SimulatorState, pod: PodSpec) -> Optional[str]:
     try:
         nid = int(nodeID)
         dir = f"/root/simulating/10.0.{nid // 250}.{nid % 250 + 1}"
-        filepath = f"{dir}/images.json"
-        imageTag = f"{image}:latest"
-        # print(f"[INFO] Storing image {imageTag} to node {nodeID} at {filepath}")
-        # os.makedirs(dir_path, exist_ok=True)
-        addInfo = {
-            "repoTags": [f"{imageTag}"]
-        }
-        with open(filepath, "r") as f:
-            data = json.load(f)
-
-        if "images" not in data:
-            data["images"] = []
-        elif not isinstance(data["images"], list):
-            data["images"] = []
-
-        for existing in data["images"]:
-            if isinstance(existing, dict) and "repoTags" in existing:
-                if isinstance(existing["repoTags"], list) and imageTag in existing["repoTags"]:
-                    # print(f"[INFO] Image {imageTag} already exists in node {nodeID}")
-                    return None
-                
-        data["images"].append(addInfo)
-        with open(filepath, "w") as f:
-            json.dump(data, f, indent=2)
-
-        # Update simulator state
+        bundleFilepath = f"{dir}/bundles.json"
+        filejsonPath = f"{dir}/PrefabService/File.json"
         nodeName = f"worker-{nodeID}"
+        
+        if not os.path.exists(dir):
+            return f"Directory not found: {dir}"
+        if not os.path.exists(bundleFilepath):
+            return f"Bundle file not found: {bundleFilepath}"
+        if not os.path.exists(filejsonPath):
+            return f"File.json not found: {filejsonPath}"
+        
         node = state.nodes.get(nodeName)
-        if not node:
-            return f"Node {nodeName} not found in state"
+        if node is None:
+            return f"Node not found: {nodeName}"
+            
+        if bundle not in state.catalog:
+            return f"Bundle not in catalog: {bundle}"
+        
+        # Update bundles.json
+        with open(bundleFilepath, "r") as f:
+            bundles_data = json.load(f)
+            
+        if bundle not in bundles_data:
+            bundles_data[bundle] = {
+                "Id": state.catalog[bundle].id,
+                "Name": bundle,
+                "Tag": state.catalog[bundle].tag,
+                "Size": state.catalog[bundle].realSize
+            }
+
+        with open(bundleFilepath, "w") as f:
+            json.dump(bundles_data, f, indent=4)
+
+        # Update File.json
+        with open(filejsonPath, "r") as f:
+            file_data = json.load(f)
+            
         needs = state._needs_for_pod_on_node(node, pod)
-        for layer, ids in needs.items():
-            if not ids:
-                continue
-            node.cache.setdefault(layer, set()).update(ids)
+        
+        for bundle_name, ids in needs.items():
+            for pid in ids:
+                if pid not in file_data:
+                    filesize = state.catalog[bundle].prefabSizes.get(pid, 0) if bundle in state.catalog else 0
+                    file_data[pid] = {
+                        "filename": pid, 
+                        "filetype": "test", 
+                        "filesize": filesize
+                    }
+            # Update node cache
+            node.cache.setdefault(bundle, set()).update(ids)
+            
+        with open(filejsonPath, "w") as f:
+            json.dump(file_data, f, indent=4)
 
         return None
     except Exception as e:
-        return str(e)  
-
-def waitForPodScheduled(initTime: float, podID: str, image: str, timeoutSeconds: int = 10):
+        print(f"[ERROR] bundleInfoToStore failed on node {nodeID}, bundle {bundle}: {e}")
+        return str(e)
+    
+def waitForPodScheduled(initTime: float, podID: str, bundle: str, timeoutSeconds: int = 10):
     start = time.monotonic()
     while time.monotonic() - start < timeoutSeconds:
         try:
+            output = _run(KUBECTL_BASE + ["get", "pod", podID, "-o", "json"])
+            podInfo = json.loads(output)
             output = _run(KUBECTL_BASE + ["get", "pod", podID, "-o", "json"])
             podInfo = json.loads(output)
 
@@ -334,16 +372,13 @@ def waitForPodScheduled(initTime: float, podID: str, image: str, timeoutSeconds:
                 print(f"[ERROR] Pod {podID} scheduling failed")
                 return
             if nodeName:
-                # node name is like "worker-1"
-                # need to return "1"
                 nodeID = nodeName.split("-")[1]
-                # err = imageInfoToStore(nodeID, image)
                 return nodeID
         except Exception as e:
             print(f"[WARN] Failed to get pod {podID} info: {e}")
             pass
 
-        time.sleep(0.5)
+        time.sleep(0.1)
 
     return
 
@@ -358,31 +393,26 @@ class timeOpt:
     def getinitTime(self):
         return self.initTime
 
-
 if __name__ == "__main__":
     parser  = argparse.ArgumentParser()
     parser.add_argument("--bw", type=int, help="")
     parser.add_argument("--test", type=str, help="")
     parser.add_argument("--factor", type=float, help="")
     args = parser.parse_args()
-
     if args.factor is not None:
         FACTOR = args.factor
         
     print(f"[INFO] Using time factor: {FACTOR}")
-
-    f = open(f"crio-{args.bw}.log",'w')
+    f = open(f"bundle-{args.bw}.log",'w')
     events = load_simulation_events(args.test)
     scheduedCount = 0
 
     timeopt = timeOpt()
     initTime = timeopt.getinitTime()
 
-    
     nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
-    catalog = buildLayerCatalog(loadJSON("payload.json"))
+    catalog = buildPrefabCatalog(loadJSON("apps.json"), loadJSON("Bundles.json"))
     state = SimulatorState(catalog, nodeIDs, networkBW=(args.bw)*MB)
-
 
     f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS\n")
     for idx, ev in enumerate(events):
@@ -393,23 +423,22 @@ if __name__ == "__main__":
         startTime = factorTime(start_time, FACTOR)
         endTime = factorTime(end_time, FACTOR)
         duration = endTime - startTime
-        image = JOBID_TO_IMAGE.get(jobid)
-        if image is None:
-            print(f"[ERROR] jobid {jobid} not found in JOBID_TO_IMAGE")
+        bundle = JOBID_TO_BUNDLE.get(jobid)
+        if bundle is None:
+            print(f"[WARN] Unknown jobid {jobid}, skipping")
             continue
-
         podID = f"job-{jobid}-{idx+1}"
-        pod = PodSpec(requirements={image: None})
+        pod = PodSpec(requirements={bundle: None})
         podStart = initTime + startTime
         now = time.monotonic()
         if podStart > now:
             time.sleep(podStart - now)
-
+        
         nid, pullingTime, ppNum = createPodAndAutoDelete(
                                             state,
                                             pod,
                                             podID,
-                                            image=image,
+                                            image=bundle,
                                             cpu="2",
                                             mem="512Mi",
                                             ephemeralStorage="1000Mi",
@@ -421,8 +450,13 @@ if __name__ == "__main__":
         realStart = start_time
         realPulled = realStart + backtoRealTime(pullingTime, FACTOR)
         realEnd = realPulled + (end_time - start_time)
-        f.write(f"{scheduedCount}, {podID}, {jobid}, {nid}, {image}, {realStart:.2f}, {realPulled:.2f}, {realEnd:.2f}, {ppNum}\n")
+        f.write(f"{scheduedCount}, {podID}, {jobid}, {nid}, {bundle}, {realStart:.2f}, {realPulled:.2f}, {realEnd:.2f}, {ppNum}\n")
 
-    
-    print(f"crio-{args.bw}-Completed!")
-
+    print(f"bundle-{args.bw}-Completed!")
+    time.sleep(30)
+    f.flush()
+    print("store records to file!")
+    time.sleep(10)
+    _run(KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"], timeout=10)
+    print("force to close!")
+    print("--------------------------------")

@@ -1,0 +1,304 @@
+{
+  "images": [
+    {
+      "id": "sha256:a408a090-5179-4ed1-8e34-6085cb6ea975",
+      "repoTags": [
+        "brandnewworld/controller:latest"
+      ],
+      "repoDigests": [
+        "brandnewworld/controller@sha256:a408a090-5179-4ed1-8e34-6085cb6ea975"
+      ],
+      "size": "57295798",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:89f9816a-cb2b-4d72-a0d3-8009e75fdbee",
+      "repoTags": [
+        "brandnewworld/controller:v1"
+      ],
+      "repoDigests": [
+        "brandnewworld/controller@sha256:89f9816a-cb2b-4d72-a0d3-8009e75fdbee"
+      ],
+      "size": "57295798",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:3ac47abb-e1e3-47ea-a658-84b6b16f81de",
+      "repoTags": [
+        "debian:trixie-slim"
+      ],
+      "repoDigests": [
+        "debian@sha256:3ac47abb-e1e3-47ea-a658-84b6b16f81de"
+      ],
+      "size": "84277576",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:659f59ea-222a-46c9-bf75-2a79c396457f",
+      "repoTags": [
+        "ghcr.io/flannel-io/flannel-cni-plugin:v1.7.1-flannel1"
+      ],
+      "repoDigests": [
+        "ghcr.io/flannel-io/flannel-cni-plugin@sha256:659f59ea-222a-46c9-bf75-2a79c396457f"
+      ],
+      "size": "11143764",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:7d622123-a1b6-4d15-9430-16c7a72e968e",
+      "repoTags": [
+        "ghcr.io/flannel-io/flannel:v0.27.2"
+      ],
+      "repoDigests": [
+        "ghcr.io/flannel-io/flannel@sha256:7d622123-a1b6-4d15-9430-16c7a72e968e"
+      ],
+      "size": "81987245",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:e3930b95-e001-4a60-8131-7a6a04566c9e",
+      "repoTags": [
+        "registry.k8s.io/coredns/coredns:v1.11.3"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/coredns/coredns@sha256:e3930b95-e001-4a60-8131-7a6a04566c9e"
+      ],
+      "size": "61612745",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:e847a906-99a5-4399-8c57-3014fad8a23c",
+      "repoTags": [
+        "registry.k8s.io/etcd:3.5.16-0"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/etcd@sha256:e847a906-99a5-4399-8c57-3014fad8a23c"
+      ],
+      "size": "149951368",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:0b84c312-a1fd-4547-a306-867669003330",
+      "repoTags": [
+        "registry.k8s.io/kube-apiserver:v1.32.7"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/kube-apiserver@sha256:0b84c312-a1fd-4547-a306-867669003330"
+      ],
+      "size": "97029629",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:1b2a1526-2018-4df3-811e-69ccb56a1241",
+      "repoTags": [
+        "registry.k8s.io/kube-controller-manager:v1.32.7"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/kube-controller-manager@sha256:1b2a1526-2018-4df3-811e-69ccb56a1241"
+      ],
+      "size": "89755510",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:e17466dd-6f34-415a-a2ff-82c9544cf5d7",
+      "repoTags": [
+        "registry.k8s.io/kube-proxy:v1.32.7"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/kube-proxy@sha256:e17466dd-6f34-415a-a2ff-82c9544cf5d7"
+      ],
+      "size": "94058772",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:457f058d-d075-47ed-bf12-f9c634b1bd55",
+      "repoTags": [
+        "registry.k8s.io/kube-scheduler:v1.32.7"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/kube-scheduler@sha256:457f058d-d075-47ed-bf12-f9c634b1bd55"
+      ],
+      "size": "69611390",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:e82dde50-f2bf-4428-8893-796db6819cff",
+      "repoTags": [
+        "registry.k8s.io/pause:3.10"
+      ],
+      "repoDigests": [
+        "registry.k8s.io/pause@sha256:e82dde50-f2bf-4428-8893-796db6819cff"
+      ],
+      "size": "735760",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:a29bd8fa-12a9-4241-b594-89938beaac56",
+      "repoTags": [
+        "sam2:latest"
+      ],
+      "repoDigests": [
+        "sam2@sha256:a29bd8fa-12a9-4241-b594-89938beaac56"
+      ],
+      "size": "3829949305",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:64475890-e5db-4118-bddf-7d5ea1a28ce0",
+      "repoTags": [
+        "sb3:latest"
+      ],
+      "repoDigests": [
+        "sb3@sha256:64475890-e5db-4118-bddf-7d5ea1a28ce0"
+      ],
+      "size": "1168815711",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:9e144b7d-04dc-4a7b-bd48-b89e3fd3abf2",
+      "repoTags": [
+        "staging/kube-scheduler:v07112315"
+      ],
+      "repoDigests": [
+        "staging/kube-scheduler@sha256:9e144b7d-04dc-4a7b-bd48-b89e3fd3abf2"
+      ],
+      "size": "81961704",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:bf0995a1-66d8-44cd-bdc1-9e43bafc728c",
+      "repoTags": [
+        "staging/kube-scheduler:v07281615"
+      ],
+      "repoDigests": [
+        "staging/kube-scheduler@sha256:bf0995a1-66d8-44cd-bdc1-9e43bafc728c"
+      ],
+      "size": "81961704",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:65271712-51c3-41a9-b837-b6e5f956c938",
+      "repoTags": [
+        "staging/kube-scheduler:v07281820"
+      ],
+      "repoDigests": [
+        "staging/kube-scheduler@sha256:65271712-51c3-41a9-b837-b6e5f956c938"
+      ],
+      "size": "81961704",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:f7e100b1-42c0-4e8a-bc43-9dacdf89929e",
+      "repoTags": [
+        "staging/simulator-scheduler:v07112320"
+      ],
+      "repoDigests": [
+        "staging/simulator-scheduler@sha256:f7e100b1-42c0-4e8a-bc43-9dacdf89929e"
+      ],
+      "size": "111710131",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:00000000-0000-0000-0000-000000000001",
+      "repoTags": [
+        "11.0.1.37:9988/goharbor/testimg1:latest"
+      ],
+      "repoDigests": [
+        "brandnewworld/controller@sha256:00000000-0000-0000-0000-000000000001"
+      ],
+      "size": "57295798",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    },
+    {
+      "id": "sha256:00000000-0000-0000-0000-000000000002",
+      "repoTags": [
+        "11.0.1.37:9988/goharbor/testimg2:latest"
+      ],
+      "repoDigests": [
+        "brandnewworld/controller@sha256:00000000-0000-0000-0000-000000000001"
+      ],
+      "size": "57295798",
+      "uid": {
+        "value": "0"
+      },
+      "username": "root",
+      "pinned": false
+    }
+  ]
+}

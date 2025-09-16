@@ -1,0 +1,29 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pod-test
+  labels:
+    app: pod-test-app
+spec:
+  completions: 3          # 共 20 个任务
+  parallelism: 3          # 同时并发 20 个
+  backoffLimit: 0          # 失败不重试，便于观察
+  ttlSecondsAfterFinished: 120   # 完成后 120 秒自动清理 Job 及其 Pod
+  template:
+    metadata:
+      labels:
+        app: pod-test-app
+    spec:
+      schedulerName: scheduler-plugins-scheduler
+      restartPolicy: Never
+      containers:
+      - name: workload
+        image: transformers-gpu:latest
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2000m"
+            memory: "4096Mi"

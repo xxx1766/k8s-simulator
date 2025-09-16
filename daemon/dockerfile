@@ -1,0 +1,17 @@
+# Dockerfile.layer-locality
+FROM ubuntu:latest
+
+# 如果是go编译的二进制文件，通常alpine就够了
+# 如果需要其他依赖，可以换成ubuntu等
+
+# 复制可执行文件到容器
+WORKDIR /root/
+
+COPY simulating-blobdaemon ./simulating-blobdaemon
+RUN chmod +x ./simulating-blobdaemon
+
+# 暴露端口
+EXPOSE 9998
+
+# 启动命令
+CMD ["./simulating-blobdaemon"]

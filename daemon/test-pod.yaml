@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-test
+spec:
+  schedulerName: layer-scheduler
+  containers:
+  - name: workload
+    image: sam2:latest
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "1024Mi"

@@ -453,10 +453,27 @@ if __name__ == "__main__":
         f.write(f"{scheduedCount}, {podID}, {jobid}, {nid}, {bundle}, {realStart:.2f}, {realPulled:.2f}, {realEnd:.2f}, {ppNum}\n")
 
     print(f"bundle-{args.bw}-Completed!")
-    time.sleep(30)
+    time.sleep(10)
     f.flush()
     print("store records to file!")
     time.sleep(10)
-    _run(KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"], timeout=10)
+    # _run(KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"])
+    try:
+        result = subprocess.run(
+            KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False  # 不因非零退出码抛异常
+        )
+        
+        print("Pod deletion command completed")
+        if result.stderr:
+            print("Warning (this is normal):", result.stderr.strip())
+            
+    except subprocess.TimeoutExpired:
+        print("Pod deletion timed out, continuing...")
+    except Exception as e:
+        print(f"Error during pod deletion: {e}")
     print("force to close!")
     print("--------------------------------")

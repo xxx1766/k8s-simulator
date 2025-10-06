@@ -30,6 +30,11 @@ IMAGE_NAMES = [
     "yolo11-gpu"
 ]
 JOBID_TO_IMAGE: Dict[int, str] = {i: name for i, name in enumerate(IMAGE_NAMES)}
+
+# # simulating 100 images 
+# IMAGE_NAMES = ["testimg" + str(i) for i in range(1, 101)]
+# JOBID_TO_IMAGE = {i: name for i, name in enumerate(IMAGE_NAMES)}
+
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
 BANDWIDTH = 100
@@ -64,7 +69,7 @@ def buildLayerCatalog(payloadJSON: dict) -> Dict[str, ImageMeta]:
 
 @dataclass
 class NodeState:
-    cache: Dict[str, int] = field(default_factory=dict)
+    cache: Dict[str, Set[str]] = field(default_factory=dict)
     
 @dataclass
 class PodSpec:
@@ -83,20 +88,26 @@ class SimulatorState:
             return 0
         return sum(meta.layerSizes.get(lid, 0) for lid in ids)
     
+    
     def _needs_for_pod_on_node(self, node: NodeState, pod: PodSpec) -> Dict[str, Set[str]]:
-        haved: Dict[str, Set[str]] = {}
+        havedIDs = set()
+        for layer_cache in node.cache.values():
+            havedIDs.update(layer_cache)
+
         needs: Dict[str, Set[str]] = {}
-        for layer, req in pod.requirements.items():
-            meta = self.catalog.get(layer)
+        for image, req in pod.requirements.items():
+            meta = self.catalog.get(image)
             if not meta:
-                haved[layer] = set()
-                needs[layer] = set()
+                needs[image] = set()
                 continue
-            havedIDs = node.cache.get(layer, set())
             needIDs = meta.alllayers if req is None else req
 
-            haved[layer] = havedIDs & needIDs
-            needs[layer] = needIDs - havedIDs
+            needs[image] = needIDs - havedIDs
+        # print(f"Node has prefab IDs: {havedIDs}")
+        # print(f"Prefab {prefab} needs IDs: {needIDs}")
+        # print(f"Actually need to pull: {needs[prefab]}")
+        # print("-----------------------------")
+
         return needs
 
 def calculatePullTime(state: SimulatorState, pod: PodSpec, nodeID: str) -> float:
@@ -111,7 +122,6 @@ def calculatePullTime(state: SimulatorState, pod: PodSpec, nodeID: str) -> float
     for layer, ids in needs.items():
         newBytes += state._layer_sizes_for_ids(layer, ids)
     pullTime = speedPulling(newBytes, state.networkBW) if newBytes > 0 else 0.0
-
     return pullTime
 
 def speedPulling(size: int, bandwidth: int) -> float:
@@ -181,7 +191,7 @@ def createPodConfig(
     }
 
     payload = json.dumps(pod)
-    _run(KUBECTL_BASE + ["apply", "-f", "-"], stdin_str=payload)
+    _run(KUBECTL_BASE + ["create", "-f", "-"], stdin_str=payload)
     # print(f"[INFO] Pod {podName} created with image {imageTag}")
         
 def deletePod(podName: str, force: bool = False):
@@ -217,7 +227,7 @@ def createPodAndAutoDelete(
         print(f"[ERROR] Pod {podName} scheduling timeout")
         return
     pullingTime = calculatePullTime(state, pod, nodeID)
-    t1 = threading.Timer(pullingTime, imageInfoToStore, args=(nodeID, image, state, pod))
+    t1 = threading.Timer(0, imageInfoToStore, args=(nodeID, image, state, pod))
     t1.start()
     # print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
     t2 = threading.Timer(pullingTime+lifetimeSeconds, deletePod, args=(podName,))
@@ -310,10 +320,13 @@ def imageInfoToStore(nodeID: str, image: str, state: SimulatorState, pod: PodSpe
         if not node:
             return f"Node {nodeName} not found in state"
         needs = state._needs_for_pod_on_node(node, pod)
+        # print(needs)
         for layer, ids in needs.items():
             if not ids:
                 continue
+            # print(ids)
             node.cache.setdefault(layer, set()).update(ids)
+            # print(node.cache)
 
         return None
     except Exception as e:
@@ -364,10 +377,15 @@ if __name__ == "__main__":
     parser.add_argument("--bw", type=int, help="")
     parser.add_argument("--test", type=str, help="")
     parser.add_argument("--factor", type=float, help="")
+    parser.add_argument("--node", type=int, help="")
     args = parser.parse_args()
 
     if args.factor is not None:
         FACTOR = args.factor
+    if args.node is not None:
+        NODE_NUM = args.node
+        
+    print("[INFO] Node number:", NODE_NUM)
         
     print(f"[INFO] Using time factor: {FACTOR}")
 
@@ -380,11 +398,11 @@ if __name__ == "__main__":
 
     
     nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
-    catalog = buildLayerCatalog(loadJSON("payload.json"))
+    catalog = buildLayerCatalog(loadJSON("/root/payload.json"))
     state = SimulatorState(catalog, nodeIDs, networkBW=(args.bw)*MB)
 
 
-    f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS\n")
+    f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS, ppnum\n")
     for idx, ev in enumerate(events):
         jobid = ev["jobid"]
         start_time = float(ev["start_time"])
@@ -410,9 +428,9 @@ if __name__ == "__main__":
                                             pod,
                                             podID,
                                             image=image,
-                                            cpu="2",
-                                            mem="512Mi",
-                                            ephemeralStorage="1000Mi",
+                                            cpu="4",
+                                            mem="4Gi",
+                                            ephemeralStorage="7Gi",
                                             lifetimeSeconds=duration,
                                             initTime=initTime
                                         )
@@ -423,6 +441,8 @@ if __name__ == "__main__":
         realEnd = realPulled + (end_time - start_time)
         f.write(f"{scheduedCount}, {podID}, {jobid}, {nid}, {image}, {realStart:.2f}, {realPulled:.2f}, {realEnd:.2f}, {ppNum}\n")
 
+        if scheduedCount % 500 == 0 :
+            print(f"Jobs have doned at {scheduedCount}")
     
     print(f"layer-{args.bw}-Completed!")
     time.sleep(10)

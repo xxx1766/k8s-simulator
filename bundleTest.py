@@ -16,6 +16,7 @@ KUBECTL_BASE = [
     "--server", KUBE_SERVER,
     "--insecure-skip-tls-verify=true",
     "--namespace", NAMESPACE,
+    "--request-timeout=60s",
 ]
 
 # crio
@@ -31,6 +32,12 @@ BUNDLE_NAMES = [
     "yolo11"
 ]
 JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+
+# # simulating 100 bundles
+# BUNDLE_NAMES = [f"app{i:03d}" for i in range(1, 101)]
+# BUNDLE_NAMES = [f"appimg{i}" for i in range(1, 101)]
+# JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
 BANDWIDTH = 100
@@ -82,7 +89,7 @@ def buildPrefabCatalog(appJSON: Dict, bundleJSON: Dict) -> Dict[str, BundleMeta]
 
 @dataclass
 class NodeState:
-    cache: Dict[str, int] = field(default_factory=dict)
+    cache: Dict[str, Set[str]] = field(default_factory=dict)
     
 @dataclass
 class PodSpec:
@@ -102,19 +109,24 @@ class SimulatorState:
         return sum(meta.prefabSizes.get(pid, 0) for pid in ids)
     
     def _needs_for_pod_on_node(self, node: NodeState, pod: PodSpec) -> Dict[str, Set[str]]:
-        haved: Dict[str, Set[str]] = {}
+        havedIDs = set()
+        for bundle_cache in node.cache.values():
+            havedIDs.update(bundle_cache)
+
         needs: Dict[str, Set[str]] = {}
         for prefab, req in pod.requirements.items():
             meta = self.catalog.get(prefab)
             if not meta:
-                haved[prefab] = set()
                 needs[prefab] = set()
                 continue
-            havedIDs = node.cache.get(prefab, set())
             needIDs = meta.allPrefabIDs if req is None else req
 
-            haved[prefab] = havedIDs & needIDs
             needs[prefab] = needIDs - havedIDs
+        # print(f"Node has prefab IDs: {havedIDs}")
+        # print(f"Prefab {prefab} needs IDs: {needIDs}")
+        # print(f"Actually need to pull: {needs[prefab]}")
+        # print("-----------------------------")
+
         return needs
     
 def calculatePullTime(state: SimulatorState, pod: PodSpec, nodeID: str) -> float:
@@ -199,7 +211,7 @@ def createPodConfig(
     }
 
     payload = json.dumps(pod)
-    _run(KUBECTL_BASE + ["apply", "-f", "-"], stdin_str=payload)
+    _run(KUBECTL_BASE + ["create", "-f", "-"], stdin_str=payload)
     # print(f"[INFO] Pod {podName} created with image {imageTag}")
         
 def deletePod(podName: str, force: bool = False):
@@ -230,14 +242,14 @@ def createPodAndAutoDelete(
     createPodConfig(
         podName, lifetimeSeconds, image, cpu, mem, ephemeralStorage, labels, annotations
     )
-    nodeID = waitForPodScheduled(initTime, podName, image, timeoutSeconds=30)
+    nodeID, waitingTime = waitForPodScheduled(initTime, podName, image, timeoutSeconds=60)
     if nodeID is None:
         print(f"[ERROR] Pod {podName} scheduling timeout")
         return
     pullingTime = calculatePullTime(state, pod, nodeID)
-    t1 = threading.Timer(pullingTime, bundleInfoToStore, args=(nodeID, image, state, pod))
+    t1 = threading.Timer(0, bundleInfoToStore, args=(nodeID, image, state, pod))
     t1.start()
-    print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
+    # print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
     t2 = threading.Timer(pullingTime+lifetimeSeconds, deletePod, args=(podName,))
     t2.start()
     return nodeID, pullingTime, getSpecificNodePodCount(nodeID)
@@ -373,7 +385,7 @@ def waitForPodScheduled(initTime: float, podID: str, bundle: str, timeoutSeconds
                 return
             if nodeName:
                 nodeID = nodeName.split("-")[1]
-                return nodeID
+                return nodeID, time.monotonic()-start
         except Exception as e:
             print(f"[WARN] Failed to get pod {podID} info: {e}")
             pass
@@ -398,10 +410,14 @@ if __name__ == "__main__":
     parser.add_argument("--bw", type=int, help="")
     parser.add_argument("--test", type=str, help="")
     parser.add_argument("--factor", type=float, help="")
+    parser.add_argument("--node", type=int, help="")
     args = parser.parse_args()
     if args.factor is not None:
         FACTOR = args.factor
+    if args.node is not None:
+        NODE_NUM = args.node
         
+    print("[INFO] Node number:", NODE_NUM)
     print(f"[INFO] Using time factor: {FACTOR}")
     f = open(f"bundle-{args.bw}.log",'w')
     events = load_simulation_events(args.test)
@@ -411,10 +427,10 @@ if __name__ == "__main__":
     initTime = timeopt.getinitTime()
 
     nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
-    catalog = buildPrefabCatalog(loadJSON("apps.json"), loadJSON("Bundles.json"))
+    catalog = buildPrefabCatalog(loadJSON("/root/apps.json"), loadJSON("/root/Bundles.json"))
     state = SimulatorState(catalog, nodeIDs, networkBW=(args.bw)*MB)
 
-    f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS\n")
+    f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS, ppnum\n")
     for idx, ev in enumerate(events):
         jobid = ev["jobid"]
         start_time = float(ev["start_time"])
@@ -439,9 +455,9 @@ if __name__ == "__main__":
                                             pod,
                                             podID,
                                             image=bundle,
-                                            cpu="2",
-                                            mem="512Mi",
-                                            ephemeralStorage="1000Mi",
+                                            cpu="4",
+                                            mem="4Gi",
+                                            ephemeralStorage="7Gi",
                                             lifetimeSeconds=duration,
                                             initTime=initTime
                                         )
@@ -452,6 +468,9 @@ if __name__ == "__main__":
         realEnd = realPulled + (end_time - start_time)
         f.write(f"{scheduedCount}, {podID}, {jobid}, {nid}, {bundle}, {realStart:.2f}, {realPulled:.2f}, {realEnd:.2f}, {ppNum}\n")
 
+        if scheduedCount % 500 == 0 :
+            print(f"Jobs have doned at {scheduedCount}")
+            
     print(f"bundle-{args.bw}-Completed!")
     time.sleep(10)
     f.flush()
@@ -463,7 +482,7 @@ if __name__ == "__main__":
             KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"],
             capture_output=True,
             text=True,
-            timeout=10,
+            timeout=3,
             check=False  # 不因非零退出码抛异常
         )
         

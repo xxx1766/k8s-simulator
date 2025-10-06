@@ -1,2 +1,11 @@
 *.log
 *.sh
+bin/*
+lib/*
+lib64/*
+lib64
+include/*
+plots/*
+tail_plots/*
+share/*
+pyvenv.cfg

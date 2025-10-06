@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import subprocess, json, concurrent.futures, time
 
 KUBE_SERVER = "http://localhost:3131"  # 你的 kwok kube-apiserver
@@ -22,7 +23,7 @@ def run(cmd, stdin_str=None):
         raise RuntimeError(f"cmd failed: {' '.join(cmd)}\nstdout:\n{out}\nstderr:\n{err}")
     return out
 
-def create_node(idx: int, cpu="16", mem="32Gi", pods="8", storage="50Gi"):
+def create_node(idx: int, cpu="16", mem="32Gi", pods="4", storage="50Gi"):
     name = f"worker-{idx}"
     node_ip = f"10.0.{idx//250}.{idx%250+1}"
 
@@ -97,4 +98,7 @@ def main(total=1000, workers=32):
     print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
 
 if __name__ == "__main__":
-    main(total=1000, workers=32)
+    parser  = argparse.ArgumentParser()
+    parser.add_argument("-n", type=int, help="")
+    args = parser.parse_args()
+    main(total=args.n, workers=32)

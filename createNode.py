@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import threading
 import subprocess, json, concurrent.futures, time
 
 KUBE_SERVER = "http://localhost:3131"  # 你的 kwok kube-apiserver
@@ -91,10 +92,46 @@ def main(total=1000, workers=32):
             try:
                 f.result()
                 created += 1
+                cmd = f"kubectl taint nodes worker-{created} node.kubernetes.io/not-ready:NoSchedule-"
+                try:
+                    subprocess.run(cmd, shell=True, check=True, 
+                                        capture_output=True, text=True)
+                except subprocess.CalledProcessError as e:
+                    print(f"Error processing worker-{created}: {e}")
+
                 if created % 50 == 0:
                     print(f"[{created}/{total}] nodes created...")
             except Exception as e:
                 print("ERROR:", e)
+    print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
+
+def main_simple(total=1000, workers=32):
+    start = time.time()
+    created = 0
+    created_lock = threading.Lock()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        future_to_node = {ex.submit(create_node, i): i for i in range(1, total + 1)}
+        for future in concurrent.futures.as_completed(future_to_node):
+            node_id = future_to_node[future]
+            try:
+                future.result()
+                with created_lock:
+                    created += 1
+                    current_created = created
+                
+                cmd = ["kubectl", "taint", "nodes", f"worker-{node_id}", 
+                       "node.kubernetes.io/not-ready:NoSchedule-"]
+                try:
+                    subprocess.run(cmd, check=True, capture_output=True, text=True)
+                except subprocess.CalledProcessError as e:
+                    print(f"Error removing taint from worker-{node_id}: {e}")
+
+                if current_created % 50 == 0:
+                    print(f"[{current_created}/{total}] nodes created...")
+                    
+            except Exception as e:
+                print(f"ERROR creating worker-{node_id}: {e}")
+    
     print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
 
 if __name__ == "__main__":

@@ -460,7 +460,7 @@ class timeOpt:
 if __name__ == "__main__":
     parser  = argparse.ArgumentParser()
     parser.add_argument("--bw", type=int, help="")
-    parser.add_argument("--test", type=str, help="")
+    parser.add_argument("--test", type=int, help="")
     parser.add_argument("--factor", type=float, help="")
     parser.add_argument("--node", type=int, help="")
     args = parser.parse_args()
@@ -471,8 +471,10 @@ if __name__ == "__main__":
         
     print("[INFO] Node number:", NODE_NUM)
     print(f"[INFO] Using time factor: {FACTOR}")
-    f = open(f"bundle-{args.bw}.log",'w')
-    events = load_simulation_events(args.test)
+    f = open(f"bundle-bw{args.bw}-node{args.node}-test{args.test}.log",'w')
+    testfile = f"/root/k8s-simulator/trace/2017-9-25-Simulation-{args.test}jobs.json"
+    print(f"[INFO] Using test file: {testfile}")
+    events = load_simulation_events(testfile)
     scheduedCount = 0
 
     timeopt = timeOpt()
@@ -524,7 +526,7 @@ if __name__ == "__main__":
         if scheduedCount % 500 == 0 :
             print(f"Jobs have doned at {scheduedCount}")
             
-    print(f"bundle-{args.bw}-Completed!")
+    print(f"bundle-bw{args.bw}-node{args.node}-test{args.test}-Completed!")
     time.sleep(2)
     f.flush()
     print("store records to file!")

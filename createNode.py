@@ -24,7 +24,7 @@ def run(cmd, stdin_str=None):
         raise RuntimeError(f"cmd failed: {' '.join(cmd)}\nstdout:\n{out}\nstderr:\n{err}")
     return out
 
-def create_node(idx: int, cpu="16", mem="32Gi", pods="4", storage="50Gi"):
+def create_node(idx: int, cpu="16", mem="32Gi", pods="8", storage="50Gi"):
     name = f"worker-{idx}"
     node_ip = f"10.0.{idx//250}.{idx%250+1}"
 
@@ -83,30 +83,12 @@ metadata:
     
     return name
 
+
 def main(total=1000, workers=32):
     start = time.time()
-    created = 0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
-        futures = [ex.submit(create_node, i) for i in range(1, total + 1)]
-        for i, f in enumerate(concurrent.futures.as_completed(futures), 1):
-            try:
-                f.result()
-                created += 1
-                cmd = f"kubectl taint nodes worker-{created} node.kubernetes.io/not-ready:NoSchedule-"
-                try:
-                    subprocess.run(cmd, shell=True, check=True, 
-                                        capture_output=True, text=True)
-                except subprocess.CalledProcessError as e:
-                    print(f"Error processing worker-{created}: {e}")
-
-                if created % 50 == 0:
-                    print(f"[{created}/{total}] nodes created...")
-            except Exception as e:
-                print("ERROR:", e)
-    print(f"Done. Created {created}/{total} nodes in {time.time() - start:.1f}s")
-
-def main_simple(total=1000, workers=32):
-    start = time.time()
+    # kubectl delete nodes --all
+    run(KUBECTL_BASE + ["delete", "nodes", "--all"])
+    time.sleep(1)
     created = 0
     created_lock = threading.Lock()
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
@@ -138,4 +120,8 @@ if __name__ == "__main__":
     parser  = argparse.ArgumentParser()
     parser.add_argument("-n", type=int, help="")
     args = parser.parse_args()
+    run(["kubectl", "delete", "pods", "--all", "--force", "--grace-period=0"])
+    run(["kubectl", "delete", "nodes", "--all"])
+    run(["rm", "-rf", WORKDIR])
+
     main(total=args.n, workers=32)

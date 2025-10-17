@@ -9,3 +9,6 @@ plots/*
 tail_plots/*
 share/*
 pyvenv.cfg
+500job/
+300job/
+100job/

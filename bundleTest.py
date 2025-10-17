@@ -20,23 +20,27 @@ KUBECTL_BASE = [
 ]
 
 # crio
-BUNDLE_NAMES = [
-    "clip",
-    "lora",
-    "sam2",
-    "sb3",
-    "stablediffusion",
-    "transformers",
-    "tts",
-    "whisper",
-    "yolo11"
-]
-JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+# BUNDLE_NAMES = [
+#     "clip",
+#     "lora",
+#     "sam2",
+#     "sb3",
+#     "stablediffusion",
+#     "transformers",
+#     "tts",
+#     "whisper",
+#     "yolo11"
+# ]
+# JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+# BUNDLEJSON = "/root/k8s-simulator/9-jobs-info/Bundles.json"
+# APPJSON = "/root/k8s-simulator/9-jobs-info/apps.json"
 
 # # simulating 100 bundles
-# BUNDLE_NAMES = [f"app{i:03d}" for i in range(1, 101)]
-# BUNDLE_NAMES = [f"appimg{i}" for i in range(1, 101)]
-# JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+JOBNUM=500
+BUNDLE_NAMES = [f"appimg{i}" for i in range(1, JOBNUM+1)]
+JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+BUNDLEJSON = f"/root/k8s-simulator/{JOBNUM}-jobs-info/Bundles.json"
+APPJSON = f"/root/k8s-simulator/{JOBNUM}-jobs-info/apps.json"
 
 MAX_POD_CONCURRENCY = 8
 PULL_STRATEGY = 1
@@ -50,6 +54,7 @@ MAX_CONTAINER_THRESHOLD = 2 * GB
 MIN_NODE_SCORE  = 0
 MAX_NODE_SCORE  = 100
 FACTOR = 2.0
+MAXTIME = 3600.0 * 24 + 10.0
 
 @dataclass
 class BundleMeta:
@@ -168,6 +173,7 @@ def _run(cmd, stdin_str=None, timeout=15):
 def createPodConfig(
     podName: str,
     lifetimeSeconds: float,
+    nodeID: str = "",
     image: str = "pause",
     cpu: str = "2",
     mem: str = "512Mi",
@@ -187,32 +193,63 @@ def createPodConfig(
         resources["limits"]["ephemeral-storage"] = ephemeralStorage
 
     imageTag = f"{image}:latest"
-    pod = {
-        "apiVersion": "v1",
-        "kind": "Pod",
-        "metadata": {
-            "name": podName,
-            "namespace": NAMESPACE,
-            "labels": labels,
-            "annotations": annotations,
-        },
-        "spec": {
-            "schedulerName": "bundle-scheduler",
-            "restartPolicy": "Never",
-            "activeDeadlineSeconds": max(int(lifetimeSeconds),1),  # Invalid value: 0: must be between 1 and 2147483647, inclusive
-            "containers": [
-                {
-                    "name": image,
-                    "image": imageTag,                    # 比如 busybox/nginx
-                    "resources": resources,
-                }
-            ],
-        },
-    }
+    pod = {}
+    if nodeID == "":
+        pod = {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "name": podName,
+                "namespace": NAMESPACE,
+                "labels": labels,
+                "annotations": annotations,
+            },
+            "spec": {
+                "schedulerName": "bundle-scheduler",
+                "restartPolicy": "Never",
+                "activeDeadlineSeconds": max(int(lifetimeSeconds),1),  # Invalid value: 0: must be between 1 and 2147483647, inclusive
+                "containers": [
+                    {
+                        "name": image,
+                        "image": imageTag,                    # 比如 busybox/nginx
+                        "resources": resources,
+                    }
+                ],
+            },
+        }
+
+        
+    else:
+        nid = f"worker-{nodeID}"
+        pod = {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "name": podName,
+                "namespace": NAMESPACE,
+                "labels": labels,
+                "annotations": annotations,
+            },
+            "spec": {
+                "schedulerName": "bundle-scheduler",
+                "restartPolicy": "Never",
+                "activeDeadlineSeconds": max(int(lifetimeSeconds),1),  # Invalid value: 0: must be between 1 and 2147483647, inclusive
+                "nodeName": nid,
+                "containers": [
+                    {
+                        "name": image,
+                        "image": imageTag,                    # 比如 busybox/nginx
+                        "resources": resources,
+                    }
+                ],
+            },
+        }
 
     payload = json.dumps(pod)
     _run(KUBECTL_BASE + ["create", "-f", "-"], stdin_str=payload)
+
     # print(f"[INFO] Pod {podName} created with image {imageTag}")
+    
         
 def deletePod(podName: str, force: bool = False):
     args = ["delete", "pod", podName]
@@ -237,21 +274,36 @@ def createPodAndAutoDelete(
     labels: dict | None = None,
     annotations: dict | None = None,
     lifetimeSeconds: float = 1.0,
+    podStart: float = 0.0,
     initTime: float = 0.0,
 ):
     createPodConfig(
-        podName, lifetimeSeconds, image, cpu, mem, ephemeralStorage, labels, annotations
+        podName, factorTime(MAXTIME, FACTOR), "", image, cpu, mem, ephemeralStorage, labels, annotations
     )
-    nodeID, waitingTime = waitForPodScheduled(initTime, podName, image, timeoutSeconds=60)
+    nodeID, waitingTime = waitForPodScheduled(podStart, podName, image, timeoutSeconds=60)
     if nodeID is None:
         print(f"[ERROR] Pod {podName} scheduling timeout")
         return
+    # for i in range(4):
+    #     podCopyName = f"{podName}-copy-{i+1}"
+    #     createPodConfig(
+    #         podCopyName, lifetimeSeconds, nodeID, image, cpu, mem, ephemeralStorage, labels, annotations
+    #     )
     pullingTime = calculatePullTime(state, pod, nodeID)
+    # without pullingTime
     t1 = threading.Timer(0, bundleInfoToStore, args=(nodeID, image, state, pod))
+
+    # with pullingTime
+    # t1 = threading.Timer(pullingTime, bundleInfoToStore, args=(nodeID, image, state, pod))
     t1.start()
-    # print(f"[INFO] Pod {podName}, pullingTime: {pullingTime:.2f}s, lifetime: {lifetimeSeconds:.2f}s, node: {nodeID}, pipelineNum: {getSpecificNodePodCount(nodeID)}")
-    t2 = threading.Timer(pullingTime+lifetimeSeconds, deletePod, args=(podName,))
+
+    lifetime = min(factorTime(MAXTIME, FACTOR)-(podStart-initTime), pullingTime+lifetimeSeconds) + 200
+    t2 = threading.Timer(lifetime, deletePod, args=(podName,))
     t2.start()
+    # for i in range(4):
+    #     podCopyName = f"{podName}-copy-{i+1}"
+    #     t_copy = threading.Timer(lifetime, deletePod, args=(podCopyName,))
+    #     t_copy.start()
     return nodeID, pullingTime, getSpecificNodePodCount(nodeID)
 
 def getNodePodCount(nodeName: str = None) -> dict:
@@ -367,7 +419,7 @@ def bundleInfoToStore(nodeID: str, bundle: str, state: SimulatorState, pod: PodS
         print(f"[ERROR] bundleInfoToStore failed on node {nodeID}, bundle {bundle}: {e}")
         return str(e)
     
-def waitForPodScheduled(initTime: float, podID: str, bundle: str, timeoutSeconds: int = 10):
+def waitForPodScheduled(podStart: float, podID: str, bundle: str, timeoutSeconds: int = 10):
     start = time.monotonic()
     while time.monotonic() - start < timeoutSeconds:
         try:
@@ -427,7 +479,7 @@ if __name__ == "__main__":
     initTime = timeopt.getinitTime()
 
     nodeIDs = [f"worker-{i}" for i in range(1, NODE_NUM+1)]
-    catalog = buildPrefabCatalog(loadJSON("/root/apps.json"), loadJSON("/root/Bundles.json"))
+    catalog = buildPrefabCatalog(loadJSON(APPJSON), loadJSON(BUNDLEJSON))
     state = SimulatorState(catalog, nodeIDs, networkBW=(args.bw)*MB)
 
     f.write("No, podname, jobid, node, image, startAbs, pulledAbs, edABS, ppnum\n")
@@ -459,6 +511,7 @@ if __name__ == "__main__":
                                             mem="4Gi",
                                             ephemeralStorage="7Gi",
                                             lifetimeSeconds=duration,
+                                            podStart=podStart,
                                             initTime=initTime
                                         )
         scheduedCount += 1
@@ -472,10 +525,14 @@ if __name__ == "__main__":
             print(f"Jobs have doned at {scheduedCount}")
             
     print(f"bundle-{args.bw}-Completed!")
-    time.sleep(10)
+    time.sleep(2)
     f.flush()
     print("store records to file!")
-    time.sleep(10)
+    time.sleep(2)
+
+    print("force to delete all pods!")
+    print("--------------------------------")
+
     # _run(KUBECTL_BASE + ["delete", "pods", "--all", "--force", "--grace-period=0"])
     try:
         result = subprocess.run(

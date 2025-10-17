@@ -135,8 +135,8 @@ def analyze(df: pd.DataFrame, total_nodes: int = 1000):
     # 变异系数 (CV = 标准差/均值)
     pulled_cv = pulled_std / pulled_mean if pulled_mean > 0 else float("nan")
     
-    # 慢任务比例（拉取时间超过10秒的任务比例）
-    slow_tasks = len(df[df["pulledtime"] > 15])
+    # 慢任务比例（拉取时间超过40秒的任务比例）
+    slow_tasks = len(df[df["pulledtime"] > 40])
     slow_task_ratio = slow_tasks / len(df) if len(df) > 0 else 0.0
 
     # 时间窗口（从最早开始到最晚结束）
@@ -229,7 +229,7 @@ def main():
         print(f"最大值: {results['pulled_max']:.2f}s")
         print(f"总拉取时间: {results['pulled_total']:.2f}s")
         print(f"变异系数: {results['pulled_cv']:.3f}")
-        print(f"慢任务比例(>15s): {fmt_pct(results['slow_task_ratio'])}")
+        print(f"慢任务比例(>40s): {fmt_pct(results['slow_task_ratio'])}")
         print(f"\n=== 集群使用率 ===")
         print(f"时间加权集群使用率: {fmt_pct(results['cluster_utilization'])}")
         print(f"活跃节点数: {results['active_nodes']}")

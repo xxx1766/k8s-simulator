@@ -211,6 +211,48 @@ def analyze_layer_sharing(apps_data: Dict):
     print(f"平均共享度: {sum(len(imgs) for imgs in prefab_usage.values()) / len(prefab_usage):.2f}")
     print(f"最大共享度: {max(len(imgs) for imgs in prefab_usage.values())}")
 
+def print_image_size_statistics(bundle_data: Dict):
+    """
+    打印生成的所有镜像大小统计信息：平均大小、最大值、最小值、P99、P95、P90
+    
+    Args:
+        bundle_data: Bundle.json 数据字典（包含每个镜像的 Size 字段）
+    """
+    # 提取所有镜像的大小
+    image_sizes = [img["Size"] for img in bundle_data.values() if "Size" in img]
+    if not image_sizes:
+        print("没有可用于统计的镜像大小数据。")
+        return
+
+    # 排序用于计算百分位
+    image_sizes.sort()
+    n = len(image_sizes)
+
+    def percentile(p):
+        """计算百分位数"""
+        k = (n - 1) * (p / 100)
+        f = int(k)
+        c = min(f + 1, n - 1)
+        if f == c:
+            return image_sizes[f]
+        return image_sizes[f] + (image_sizes[c] - image_sizes[f]) * (k - f)
+
+    avg_size = sum(image_sizes) / n
+    max_size = max(image_sizes)
+    min_size = min(image_sizes)
+    p99 = percentile(99)
+    p95 = percentile(95)
+    p90 = percentile(90)
+
+    print("\n=== 镜像大小统计 ===")
+    print(f"镜像数量: {n}")
+    print(f"平均大小: {avg_size / (1024**3):.2f} GB")
+    print(f"最大大小: {max_size / (1024**3):.2f} GB")
+    print(f"最小大小: {min_size / (1024**3):.2f} GB")
+    print(f"P99 大小: {p99 / (1024**3):.2f} GB")
+    print(f"P95 大小: {p95 / (1024**3):.2f} GB")
+    print(f"P90 大小: {p90 / (1024**3):.2f} GB")
+
 def main():
     print("开始生成Taskc容器测试数据...")
     parser = argparse.ArgumentParser()
@@ -231,6 +273,7 @@ def main():
     save_json_file(apps_data, f"{num_images}-jobs-info/", "apps.json")
     
     analyze_layer_sharing(apps_data)
+    print_image_size_statistics(bundle_data)
     
 if __name__ == "__main__":
     main()

@@ -208,6 +208,50 @@ def analyze_layer_sharing(payload: Dict):
     print(f"平均共享度: {sum(len(imgs) for imgs in digest_usage.values()) / len(digest_usage):.2f}")
     print(f"最大共享度: {max(len(imgs) for imgs in digest_usage.values())}")
 
+def print_image_size_statistics(payload: Dict):
+    """
+    打印所有镜像大小的统计信息：平均值、最大值、最小值、P99、P95、P90
+    
+    Args:
+        payload: 所有镜像数据字典
+    """
+    image_sizes = []
+    for image_data in payload.values():
+        total_size = sum(layer["Size"] for layer in image_data["LayersData"])
+        image_sizes.append(total_size)
+
+    if not image_sizes:
+        print("没有可统计的镜像数据。")
+        return
+
+    # 排序用于分位数计算
+    image_sizes.sort()
+    n = len(image_sizes)
+
+    def percentile(p):
+        """计算百分位值"""
+        k = (n - 1) * (p / 100)
+        f = int(k)
+        c = min(f + 1, n - 1)
+        if f == c:
+            return image_sizes[int(k)]
+        return image_sizes[f] + (image_sizes[c] - image_sizes[f]) * (k - f)
+
+    avg_size = sum(image_sizes) / n
+    max_size = max(image_sizes)
+    min_size = min(image_sizes)
+    p99 = percentile(99)
+    p95 = percentile(95)
+    p90 = percentile(90)
+
+    print("\n=== 镜像大小统计 ===")
+    print(f"镜像数量: {n}")
+    print(f"平均大小: {avg_size / (1024**3):.2f} GB")
+    print(f"最大大小: {max_size / (1024**3):.2f} GB")
+    print(f"最小大小: {min_size / (1024**3):.2f} GB")
+    print(f"P99 大小: {p99 / (1024**3):.2f} GB")
+    print(f"P95 大小: {p95 / (1024**3):.2f} GB")
+    print(f"P90 大小: {p90 / (1024**3):.2f} GB")
 
 def main():
     print("开始生成Docker镜像测试数据...")
@@ -226,6 +270,7 @@ def main():
         registry="11.0.1.37:9988/goharbor"
     )
     analyze_layer_sharing(payload)
+    print_image_size_statistics(payload)
     save_payload_to_file(payload, f"{num_images}-jobs-info/", "payload.json")
 
 if __name__ == "__main__":

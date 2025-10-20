@@ -432,6 +432,9 @@ if __name__ == "__main__":
         FACTOR = args.factor
     if args.node is not None:
         NODE_NUM = args.node
+    if args.test is not None:
+        JOBNUM = args.test
+        PAYLOADJSON = f"/root/k8s-simulator/{args.test}-jobs-info/payload.json"
         
     print("[INFO] Node number:", NODE_NUM)
         
@@ -440,6 +443,7 @@ if __name__ == "__main__":
     f = open(f"layer-bw{args.bw}-node{args.node}-test{args.test}.log",'w')
     testfile = f"/root/k8s-simulator/trace/2017-9-25-Simulation-{args.test}jobs.json"
     print(f"[INFO] Using test file: {testfile}")
+    print(f"[INFO] Using payload file: {PAYLOADJSON}")
     events = load_simulation_events(testfile)
     scheduedCount = 0
 

@@ -468,12 +468,20 @@ if __name__ == "__main__":
         FACTOR = args.factor
     if args.node is not None:
         NODE_NUM = args.node
+    if args.test is not None:
+        JOBNUM = args.test
+        BUNDLEJSON = f"/root/k8s-simulator/{args.test}-jobs-info/Bundles.json"
+        APPJSON = f"/root/k8s-simulator/{args.test}-jobs-info/apps.json"
         
     print("[INFO] Node number:", NODE_NUM)
     print(f"[INFO] Using time factor: {FACTOR}")
     f = open(f"bundle-bw{args.bw}-node{args.node}-test{args.test}.log",'w')
     testfile = f"/root/k8s-simulator/trace/2017-9-25-Simulation-{args.test}jobs.json"
     print(f"[INFO] Using test file: {testfile}")
+    # BUNDLEJSON = f"/root/k8s-simulator/{args.test}-jobs-info/Bundles.json"
+    # APPJSON = f"/root/k8s-simulator/{args.test}-jobs-info/apps.json"
+    print(f"[INFO] Using bundle file: {BUNDLEJSON}")
+    print(f"[INFO] Using app file: {APPJSON}")
     events = load_simulation_events(testfile)
     scheduedCount = 0
 

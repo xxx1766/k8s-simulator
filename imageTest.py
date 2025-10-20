@@ -440,8 +440,7 @@ if __name__ == "__main__":
     print(f"[INFO] Using time factor: {FACTOR}")
     print(f"[INFO] Using bandwidth: {args.bw} MB/s")
     f = open(f"image-bw{args.bw}-node{args.node}-test{args.test}.log",'w')
-    # testfile = f"/root/k8s-simulator/trace/2017-9-25-Simulation-{args.test}jobs.json"
-    testfile = f"/root/k8s-simulator/trace/test100.json"
+    testfile = f"/root/k8s-simulator/trace/2017-9-25-Simulation-{args.test}jobs.json"
     print(f"[INFO] Using test file: {testfile}")
     print(f"[INFO] Using payload file: {PAYLOADJSON}")
     events = load_simulation_events(testfile)

@@ -436,7 +436,7 @@ if __name__ == "__main__":
         JOBNUM = args.test
         PAYLOADJSON = f"/root/k8s-simulator/{args.test}-jobs-info/payload.json"
         IMAGE_NAMES = ["testimg" + str(i) for i in range(1, JOBNUM+1)]
-        JOBID_TO_IMAGE = {i: name for i, name in enumerate(IMAGE_NAMES)}
+        JOBID_TO_IMAGE = {i+1: name for i, name in enumerate(IMAGE_NAMES)}
         
     print("[INFO] Node number:", NODE_NUM)
         

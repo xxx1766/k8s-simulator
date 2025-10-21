@@ -473,7 +473,8 @@ if __name__ == "__main__":
         BUNDLEJSON = f"/root/k8s-simulator/{args.test}-jobs-info/Bundles.json"
         APPJSON = f"/root/k8s-simulator/{args.test}-jobs-info/apps.json"
         BUNDLE_NAMES = [f"appimg{i}" for i in range(1, JOBNUM+1)]
-        JOBID_TO_BUNDLE: Dict[int, str] = {i: name for i, name in enumerate(BUNDLE_NAMES)}
+        JOBID_TO_BUNDLE: Dict[int, str] = {i+1: name for i, name in enumerate(BUNDLE_NAMES)}
+        print(f"[INFO] Loaded JOBNUM: {JOBID_TO_BUNDLE}")
         
     print("[INFO] Node number:", NODE_NUM)
     print(f"[INFO] Using time factor: {FACTOR}")
